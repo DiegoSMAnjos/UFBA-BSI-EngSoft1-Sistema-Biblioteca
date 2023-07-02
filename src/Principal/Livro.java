@@ -157,10 +157,10 @@ public class Livro implements Subject{
 	public void addObserver(Observer observador) {
 		this.observadores.add(observador);		
 	}
-
+	
 	@Override
-	public void removeObserver() {
-		// TODO Auto-generated method stub
+	public void removeObserver(Observer observador) {
+		this.observadores.remove(observador);	
 		
 	}
 
