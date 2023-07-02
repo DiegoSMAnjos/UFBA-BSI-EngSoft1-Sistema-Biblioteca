@@ -5,15 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Command.Command;
-import Command.CommandAdicionarNovoObservador;
-import Command.CommandConsultarLivro;
-import Command.CommandConsultarNotificacoes;
-import Command.CommandConsultarUsuario;
-import Command.CommandRealizarDevolucao;
-import Command.CommandRealizarEmprestimo;
-import Command.CommandRealizarReserva;
-import Command.CommandSair;
+import Command.*;
 import Observer.Observer;
 import Observer.Subject;
 import Principal.Exemplar;
