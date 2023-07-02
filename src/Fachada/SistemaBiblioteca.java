@@ -20,7 +20,7 @@ import Principal.Exemplar;
 import Principal.IUsuario;
 import Principal.Livro;
 
-// a classe SistemaBiblioteca implementa o padrão Singleton
+// a classe SistemaBiblioteca também implementa o padrão Singleton
 
 public class SistemaBiblioteca {
 	private List<IUsuario> listaUsuarios;
