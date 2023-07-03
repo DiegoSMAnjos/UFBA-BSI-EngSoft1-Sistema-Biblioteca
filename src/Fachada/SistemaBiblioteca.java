@@ -8,16 +8,12 @@ import java.util.Map;
 import Command.*;
 import Observer.Observer;
 import Observer.Subject;
-import Principal.Exemplar;
 import Principal.IUsuario;
 import Principal.Livro;
-
-// a classe SistemaBiblioteca também implementa o padrão Singleton
 
 public class SistemaBiblioteca {
 	private List<IUsuario> listaUsuarios;
 	private List<Livro> listaLivros;
-	private List<Exemplar> listaExemplares;
 	private static SistemaBiblioteca instanciaBiblioteca;
 	private Map<String, Command> commands;
 
@@ -25,7 +21,6 @@ public class SistemaBiblioteca {
 	private SistemaBiblioteca() {
 		this.listaUsuarios = new ArrayList<IUsuario>();
 		this.listaLivros = new ArrayList<Livro>();
-		this.listaExemplares = new ArrayList<Exemplar>();
 		this.commands = new HashMap<>();
 		this.getCommands().put("dev", new CommandRealizarDevolucao());
 		this.getCommands().put("res", new CommandRealizarReserva());
@@ -50,10 +45,6 @@ public class SistemaBiblioteca {
 
 	public List<Livro> getListaLivros() {
 		return this.listaLivros;
-	}
-	
-	public List<Exemplar> getListaExemplares() {
-		return this.listaExemplares;	
 	}
 	
 	public Map<String, Command> getCommands() {

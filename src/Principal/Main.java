@@ -25,16 +25,6 @@ public class Main {
 		biblioteca.getListaLivros().add(new Livro("400", "Design Patterns: Elements of Reusable Object-Oriented Software","Addison-Wesley Professional","Erich Gamma,Richard Helm, Ralph Johnson, John Vlissides", "1ª", "1994"));
 		biblioteca.getListaLivros().add(new Livro("301","Software Metrics: A Rigorous and Practical Approach", "CRC Press", "Norman Fenton,James Bieman", "3ª", "2014"));
 		biblioteca.getListaLivros().add(new Livro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language","Addison-Wesley Professional","Martin Fowler", "3ª", "2003"));
-		biblioteca.getListaExemplares().add(new Exemplar("100","01","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("100","02","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("101","03","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("200","04","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("201","05","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("300","06","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("300","07","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("400","08","Disponível"));
-		biblioteca.getListaExemplares().add(new Exemplar("400","09","Disponível"));
-		
 		System.out.println("Sistema de Biblioteca\n\nInsira um comando: ");
 		try (Scanner sc = new Scanner(System.in)) {
 			while(true) {
