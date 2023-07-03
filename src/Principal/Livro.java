@@ -14,11 +14,11 @@ public class Livro implements Subject{
 	private String editora;
 	private String autor;
 	private String edicao;
-	private String anopublicacao;
+	private String anoPublicacao;
 	private String status;
 	private IUsuario usuarioAlugado;
 	private Reserva reservaAtual;
-	private Emprestimo EmprestimoAtual;
+	private Emprestimo emprestimoAtual;
 	private static int geradorCodigo = 1;
 	private List<Reserva> reservas;
 	private List<Observer> observadores;
@@ -30,7 +30,7 @@ public class Livro implements Subject{
 		this.autor = autor;
 		this.editora = editora;
 		this.edicao = edicao;
-		this.anopublicacao = anopublicacao;
+		this.anoPublicacao = anopublicacao;
 		this.geradorCodigo = ++Livro.geradorCodigo;
 		this.codigoExemplar = String.valueOf(geradorCodigo);
 		this.status = "Livre";
@@ -49,9 +49,18 @@ public class Livro implements Subject{
 	public String getEdicao() {
 		return edicao;
 	}
+	
+
+	public String getEditora() {
+		return editora;
+	}
+
+	public void setEditora(String editora) {
+		this.editora = editora;
+	}
 
 	public String getAnoPublicacao() {
-		return anopublicacao;
+		return anoPublicacao;
 	}
 	
 	public IUsuario getUsuarioAlugado(IUsuario usuario) {
@@ -74,11 +83,14 @@ public class Livro implements Subject{
 	public Reserva getReservaAtual() {
 		return reservaAtual;
 	}
+	public List<Reserva> getReservas() {
+		return reservas;
+	}
 	
 	public void devolverItem(IUsuario usuario, Livro livro, Emprestimo emprestimo) {
 		this.usuarioAlugado = null;
 		this.status = "Livre";
-		this.EmprestimoAtual = null;
+		this.emprestimoAtual = null;
 
 	}
 	
@@ -109,11 +121,11 @@ public class Livro implements Subject{
 
 			usuario.removerReservaAtual(this);
 			this.usuarioAlugado = usuario;
-			this.EmprestimoAtual = emprestimo;
+			this.emprestimoAtual = emprestimo;
 		} else if (reservaAtual == null || !reservaAtual.getUsuario().equals(usuario)) {
 
 			this.usuarioAlugado = usuario;
-			this.EmprestimoAtual = emprestimo;
+			this.emprestimoAtual = emprestimo;
 		}
 	}
 	
@@ -141,10 +153,10 @@ public class Livro implements Subject{
 			 reserva = ("\nReserva Atual:" + this.reservaAtual.getUsuario().getNome());
 		}
 
-		if (this.EmprestimoAtual != null) {
-			 emprestimo = ("\nEmprestimo Atual:  / Usuario: " + this.EmprestimoAtual.getUsuario().getNome()
-							+ "   / Data Emprestimo: " + this.EmprestimoAtual.getDataEmprestimo()
-							+ "   / Data Devolução: " + this.EmprestimoAtual.getDataDevolucaoPrevisao());
+		if (this.emprestimoAtual != null) {
+			 emprestimo = ("\nEmprestimo Atual:  / Usuario: " + this.emprestimoAtual.getUsuario().getNome()
+							+ "   / Data Emprestimo: " + this.emprestimoAtual.getDataEmprestimo()
+							+ "   / Data Devolução: " + this.emprestimoAtual.getDataDevolucaoPrevisao());
 		}
 
 		String exibicao =" \nCodigo Exemplar: " + this.codigoExemplar + "\nTitulo: " + this.titulo + reserva + "\nStatus: " + this.status
@@ -168,5 +180,7 @@ public class Livro implements Subject{
 	public void notifyObserver(Livro livro) {
 		this.observadores.forEach(ob -> ob.update(this));		
 	}
+
+
 
 }
