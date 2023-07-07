@@ -16,12 +16,14 @@ import Command.CommandRealizarReserva;
 import Command.CommandSair;
 import Observer.Observer;
 import Observer.Subject;
+import Principal.Exemplar;
 import Principal.IUsuario;
 import Principal.Livro;
 
 public class SistemaBiblioteca {
 	private List<IUsuario> listaUsuarios;
 	private List<Livro> listaLivros;
+	private List<Exemplar> exemplares;
 	private static SistemaBiblioteca instanciaBiblioteca;
 	private Map<String, Command> commands;
 
@@ -135,10 +137,14 @@ public class SistemaBiblioteca {
 		}
 			}
 	
-		public void sairAplicacao() {
+	public void sairAplicacao() {
 			System.out.println("Saindo da aplicação...");
 			System.exit(0);
 		}
+
+	public List<Exemplar> getExemplares() {
+		return exemplares;
+	}
 
 
 
