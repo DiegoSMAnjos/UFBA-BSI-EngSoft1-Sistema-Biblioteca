@@ -20,6 +20,7 @@ import Principal.Emprestimo;
 import Principal.Exemplar;
 import Principal.IUsuario;
 import Principal.Livro;
+import Principal.Professor;
 import Principal.Reserva;
 
 public class SistemaBiblioteca {
@@ -49,7 +50,7 @@ public class SistemaBiblioteca {
 		this.getCommands().put("sai", new CommandSair());
 	}
 
-	public static SistemaBiblioteca getInstanciaSistemaBiblioteca() {
+	public static SistemaBiblioteca getInstance() {
 		if (instanciaBiblioteca == null) {
 			instanciaBiblioteca = new SistemaBiblioteca();
 		}
@@ -64,7 +65,7 @@ public class SistemaBiblioteca {
 		return this.listaLivros;
 	}
 
-	public List<Exemplar> getExemplares() {
+	public List<Exemplar> getListaExemplares() {
 		return listaExemplares;
 	}
 
@@ -85,7 +86,7 @@ public class SistemaBiblioteca {
 
 	public void realizarEmprestimoLivro(String codigoUsuario, String codigoLivro) {
 		try {
-			obterUsuario(codigoUsuario).emprestimoLivro(codigoLivro);
+			getUsuarioByCodigo(codigoUsuario).emprestimoLivro(codigoLivro, this);
 			System.out.println("Emprestimo Realizado!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível realizar o seu emprestimo! " + e.getMessage());
@@ -94,7 +95,7 @@ public class SistemaBiblioteca {
 
 	public void realizarReservaLivro(String codigoUsuario, String codigoLivro) {
 		try {
-			obterUsuario(codigoUsuario).reservarLivro(codigoLivro);
+			getUsuarioByCodigo(codigoUsuario).reservarLivro(codigoLivro, this);
 			System.out.println("Reserva Realizada!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível realizar a sua reserva! " + e.getMessage());
@@ -103,25 +104,25 @@ public class SistemaBiblioteca {
 
 	public void realizarDevolucaoLivro(String codigoUsuario, String codigoLivro) {
 		try {
-			obterUsuario(codigoUsuario).devolverLivro(codigoLivro);
+			getUsuarioByCodigo(codigoUsuario).devolverLivro(codigoLivro);
 			System.out.println("Livro devolvido com sucesso!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível devolver o livro! " + e.getMessage());
 		}
 	}
 
-	private IUsuario obterUsuario(String codigoUsuario) {
+	public IUsuario getUsuarioByCodigo(String codigoUsuario) {
 		return this.listaUsuarios.stream().filter(user -> user.getCodigo().equals(codigoUsuario)).toList().get(0);
 	}
 
-	public void consultarNotificacoes(String codigoUsuario) {
-		Observer observador = (Observer) obterUsuario(codigoUsuario);
+	public void commandConsultarNotificacoes(String codigoUsuario) {
+		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
 		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());
 	}
 
 	public void adicionarObservador(String codigoUsuario, String codigoLivro) {
 
-		Observer observador = (Observer) obterUsuario(codigoUsuario);
+		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
 
 		this.listaLivros.forEach(liv -> {
 			Subject livro = (Subject) liv;
@@ -130,16 +131,16 @@ public class SistemaBiblioteca {
 		System.out.println("Observador Registrado com Sucesso!");
 	}
 
-	public void consultarUsuarioPeloCodigo(String codigoUsuario) {
+	public void commandConsultarUsuario(String codigoUsuario) {
 		try {
-			System.out.println(SistemaBiblioteca.getInstanciaSistemaBiblioteca().exibir(obterUsuario(codigoUsuario)));
+			System.out.println(SistemaBiblioteca.getInstance().exibirInfoUsuario(getUsuarioByCodigo(codigoUsuario)));
 		} catch (Exception e) {
 			System.out.println("Não foi possível encontrar o usuário! " + e.getMessage());
 		}
 
 	}
 	
-	public String exibir(IUsuario usuario) {
+	public String exibirInfoUsuario(IUsuario usuario) {
 		String todosEmprestimos = "";
 		String todasReservas = "";
 		int i = 0;
@@ -168,7 +169,7 @@ public class SistemaBiblioteca {
 		
 	}
 
-	public void consultarLivroPeloCodigo(String codigoLivro) {
+	public void commandConsultarLivro(String codigoLivro) {
 		try {
 			List<Livro> livros = this.getListaLivros().stream()
 					.filter(livro -> livro.getCodigoLivro().equals(codigoLivro)).toList();
@@ -197,6 +198,27 @@ public class SistemaBiblioteca {
 			return livro;
 		}
 		return null;
+	}
+	
+	public List<Emprestimo> getEmprestimosAtuais(IUsuario usuario){
+		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
+		for (Emprestimo emp : listaEmprestimos) {
+			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getEmprestimoAtivo() == true){
+				emprestimosAtuais.add(emp);
+			}
+		}
+		return emprestimosAtuais;
+		
+	}
+
+	public List<Reserva> getReservasAtuais(IUsuario usuario) {
+		List<Reserva> reservasAtuais = new ArrayList<>();
+		for (Reserva res : listaReservas) {
+			if (res.getUsuario().getCodigo().equals(usuario.getCodigo()) && res.getIsAtiva() == true){
+				reservasAtuais.add(res);
+			}
+		}
+		return reservasAtuais;
 	}
 
 

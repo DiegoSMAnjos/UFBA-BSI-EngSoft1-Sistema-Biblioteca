@@ -38,7 +38,7 @@ public class Professor implements IUsuario, Observer{
 	}
 	
 	@Override
-	public void emprestimoLivro(String codigoLivro) throws Exception {
+	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
 		if (this.verificaDevedor()) {
 			throw new Exception("O usuário está com status devedor!");
 		}
@@ -69,8 +69,8 @@ public class Professor implements IUsuario, Observer{
 		
 	}
 	@Override
-	public void reservarLivro(String codigoLivro) throws Exception {
-		if (reservasAtuais.size() >= limiteReservas) {
+	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
+		if (bib.getReservasAtuais(this).size() >= limiteReservas) {
 			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
 		}
 		if (this.verificaDevedor()) {
@@ -147,7 +147,7 @@ public class Professor implements IUsuario, Observer{
 	
 	private List<Livro> getLivrosDisponiveis(String codigo) {
 
-		return SistemaBiblioteca.getInstanciaSistemaBiblioteca().getListaLivros().stream()
+		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(l -> l.getStatus().equals("Livre"))
 				.filter(livro -> livro.getCodigoLivro().equals(codigo)).toList();
 
@@ -155,7 +155,7 @@ public class Professor implements IUsuario, Observer{
 
 	private List<Livro> getLivrosReservados(String codigo) {
 
-		return SistemaBiblioteca.getInstanciaSistemaBiblioteca().getListaLivros().stream()
+		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(l -> l.getStatus().equals("Reservado"))
 				.filter(livro -> livro.getCodigoLivro().equals(codigo)).toList();
 

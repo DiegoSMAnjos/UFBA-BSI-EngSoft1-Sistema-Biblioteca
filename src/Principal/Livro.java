@@ -19,7 +19,6 @@ public class Livro implements Subject{
 	private IUsuario usuarioAlugado;
 	private Reserva reservaAtual;
 	private Emprestimo emprestimoAtual;
-	private static int geradorCodigo = 1;
 	private List<Reserva> reservas;
 	private List<Observer> observadores;
 	private int LimiteReservasObserver = 1;
@@ -31,8 +30,6 @@ public class Livro implements Subject{
 		this.editora = editora;
 		this.edicao = edicao;
 		this.anoPublicacao = anopublicacao;
-		this.geradorCodigo = ++Livro.geradorCodigo;
-		this.codigoExemplar = String.valueOf(geradorCodigo);
 		this.status = "Livre";
 		this.reservas = new ArrayList<>();
 		this.observadores = new ArrayList<>();
@@ -83,6 +80,7 @@ public class Livro implements Subject{
 	public Reserva getReservaAtual() {
 		return reservaAtual;
 	}
+	
 	public List<Reserva> getReservas() {
 		return reservas;
 	}
@@ -105,7 +103,7 @@ public class Livro implements Subject{
 	
 	private List<Livro> getLivrosReservadoCodigo(Livro livro) {
 
-		return SistemaBiblioteca.getInstanciaSistemaBiblioteca().getListaLivros().stream()
+		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(liv -> liv.getCodigoLivro().equals(this.getCodigoLivro()))
 				.filter(l -> l.getStatus().equals("Reservado")).toList();
 	}

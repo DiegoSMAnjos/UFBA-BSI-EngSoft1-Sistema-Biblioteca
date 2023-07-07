@@ -39,7 +39,7 @@ public class AlunoPosGraduacao implements IUsuario{
 	}
 	
 	@Override
-	public void emprestimoLivro(String codigoLivro) throws Exception {
+	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
 		if (emprestimosAtuais.size() >= limiteEmprestimos) {
 			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
 		}
@@ -68,7 +68,7 @@ public class AlunoPosGraduacao implements IUsuario{
 		
 	}
 	@Override
-	public void reservarLivro(String codigoLivro) throws Exception {
+	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
 		if (reservasAtuais.size() >= limiteReservas) {
 			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
 		}
@@ -147,7 +147,7 @@ public class AlunoPosGraduacao implements IUsuario{
 	
 	private List<Livro> getLivrosDisponiveis(String codigo) {
 
-		return SistemaBiblioteca.getInstanciaSistemaBiblioteca().getListaLivros().stream()
+		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(l -> l.getStatus().equals("Livre"))
 				.filter(livro -> livro.getCodigoLivro().equals(codigo)).toList();
 

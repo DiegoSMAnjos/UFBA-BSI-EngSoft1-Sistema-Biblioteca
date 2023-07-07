@@ -2,10 +2,12 @@ package Principal;
 
 import java.util.List;
 
-public interface IUsuario {
-	public void emprestimoLivro(String codigoLivro) throws Exception;
+import Fachada.SistemaBiblioteca;
 
-	public void reservarLivro(String codigoLivro) throws Exception;
+public interface IUsuario {
+	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception;
+
+	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception;
 
 	public void devolverLivro(String codigolivro);
 	

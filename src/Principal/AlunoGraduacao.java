@@ -35,13 +35,28 @@ public class AlunoGraduacao implements IUsuario{
 		return codigo;
 	}
 	
+	public List<Emprestimo> getHistoricoEmprestimos() {
+		return this.emprestimos;
+	}
+	
+	public List<Reserva> getHistoricoReservas() {
+		return this.historicoReservas;
+	}
+	
+	public List<Emprestimo> getEmprestimosAtuais() {
+		return this.emprestimosAtuais;
+	}
+	
+	public List<Reserva> getReservasAtuais() {
+		return this.reservasAtuais;
+	}
 	
 	@Override
-	public void emprestimoLivro(String codigoLivro) throws Exception {
-		if (emprestimosAtuais.size() >= limiteEmprestimos) {
+	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
+		if (bib.getEmprestimosAtuais(this).size() >= limiteEmprestimos) {
 			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
 		}
-		if (this.verificaDevedor()) {
+		if (this.verificaDevedor(bib)) {
 			throw new Exception("O usuário está com status devedor!");
 		}
 		if (this.emprestimosAtuais.stream().anyMatch(emp -> emp.getLivro().getCodigoLivro().equals(codigoLivro))) {
@@ -66,11 +81,11 @@ public class AlunoGraduacao implements IUsuario{
 		
 	}
 	@Override
-	public void reservarLivro(String codigoLivro) throws Exception {
+	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
 		if (reservasAtuais.size() >= limiteReservas) {
 			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
 		}
-		if (this.verificaDevedor()) {
+		if (this.verificaDevedor(bib)) {
 			throw new Exception("O usuário está com status devedor!");
 		}
 		if (this.reservasAtuais.stream().anyMatch(res -> res.getLivro().getCodigoLivro().equals(codigoLivro))) {
@@ -145,7 +160,7 @@ public class AlunoGraduacao implements IUsuario{
 	
 	private List<Livro> getLivrosDisponiveis(String codigo) {
 
-		return SistemaBiblioteca.getInstanciaSistemaBiblioteca().getListaLivros().stream()
+		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(l -> l.getStatus().equals("Livre"))
 				.filter(livro -> livro.getCodigoLivro().equals(codigo)).toList();
 
@@ -153,28 +168,11 @@ public class AlunoGraduacao implements IUsuario{
 
 
 
-	private boolean verificaDevedor() {
-		return this.emprestimosAtuais.stream()
+	private boolean verificaDevedor(SistemaBiblioteca bib) {
+		return bib.getEmprestimosAtuais(this).stream()
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
-	
-	
-	
-	public List<Emprestimo> getHistoricoEmprestimos() {
-		return this.emprestimos;
-	}
-	
-	public List<Reserva> getHistoricoReservas() {
-		return this.historicoReservas;
-	}
-	
-	public List<Emprestimo> getEmprestimosAtuais() {
-		return this.emprestimosAtuais;
-	}
-	
-	public List<Reserva> getReservasAtuais() {
-		return this.reservasAtuais;
-	}
+
 
 
 	

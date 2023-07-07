@@ -9,7 +9,7 @@ public class Exemplar {
 	
 	public Exemplar(String codigoLivro, String codigo) {
 		this.codigo = codigo;
-	    Livro livro = SistemaBiblioteca.getInstanciaSistemaBiblioteca().getLivroByCodigo(codigoLivro);
+	    Livro livro = SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro);
 
 	    if (livro != null) {
 	        this.livro = livro;

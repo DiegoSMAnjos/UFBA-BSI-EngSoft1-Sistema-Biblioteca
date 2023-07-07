@@ -6,7 +6,7 @@ public class CommandConsultarUsuario implements Command{
 
 	@Override
 	public void execute(String[] args) {
-		SistemaBiblioteca.getInstanciaSistemaBiblioteca().consultarUsuarioPeloCodigo(args[1]);		
+		SistemaBiblioteca.getInstance().commandConsultarUsuario(args[1]);		
 	
 	}
 

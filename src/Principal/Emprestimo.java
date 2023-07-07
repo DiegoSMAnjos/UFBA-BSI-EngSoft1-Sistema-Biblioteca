@@ -17,7 +17,7 @@ public Emprestimo(IUsuario usuario, Livro livro, LocalDate dataEmprestimo, Local
 		this.livro = livro;
 		this.dataEmprestimo = dataEmprestimo;
 		this.dataDevolucaoPrevisao = dataDevolucaoPrevisao;
-		this.emprestimoAtivo = true; 
+		this.emprestimoAtivo = true;
 	}
 
 
