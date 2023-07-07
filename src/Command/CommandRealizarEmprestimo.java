@@ -6,7 +6,7 @@ public class CommandRealizarEmprestimo implements Command{
 
 	@Override
 	public void execute(String[] args){
-		SistemaBiblioteca.getInstance().realizarEmprestimoLivro(args[1], args[2]);		
+		SistemaBiblioteca.getInstance().commandRealizarEmprestimo(args[1], args[2]);		
 		
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import Command.Command;
-import Command.CommandAdicionarNovoObservador;
+import Command.CommandAdicionarObservador;
 import Command.CommandConsultarLivro;
 import Command.CommandConsultarNotificacoes;
 import Command.CommandConsultarUsuario;
@@ -45,7 +45,7 @@ public class SistemaBiblioteca {
 		this.getCommands().put("liv", new CommandConsultarLivro());
 		this.getCommands().put("emp", new CommandRealizarEmprestimo());
 		this.getCommands().put("usu", new CommandConsultarUsuario());
-		this.getCommands().put("obs", new CommandAdicionarNovoObservador());
+		this.getCommands().put("obs", new CommandAdicionarObservador());
 		this.getCommands().put("ntf", new CommandConsultarNotificacoes());
 		this.getCommands().put("sai", new CommandSair());
 	}
@@ -84,7 +84,7 @@ public class SistemaBiblioteca {
 		this.getCommands().get(args[0]).execute(args);
 	}
 
-	public void realizarEmprestimoLivro(String codigoUsuario, String codigoLivro) {
+	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
 		try {
 			getUsuarioByCodigo(codigoUsuario).emprestimoLivro(codigoLivro, this);
 			System.out.println("Emprestimo Realizado!");
@@ -93,7 +93,7 @@ public class SistemaBiblioteca {
 		}
 	}
 
-	public void realizarReservaLivro(String codigoUsuario, String codigoLivro) {
+	public void commandRealizarReserva(String codigoUsuario, String codigoLivro) {
 		try {
 			getUsuarioByCodigo(codigoUsuario).reservarLivro(codigoLivro, this);
 			System.out.println("Reserva Realizada!");
@@ -102,7 +102,7 @@ public class SistemaBiblioteca {
 		}
 	}
 
-	public void realizarDevolucaoLivro(String codigoUsuario, String codigoLivro) {
+	public void commandRealizarDevolucao(String codigoUsuario, String codigoLivro) {
 		try {
 			getUsuarioByCodigo(codigoUsuario).devolverLivro(codigoLivro);
 			System.out.println("Livro devolvido com sucesso!");
@@ -120,7 +120,7 @@ public class SistemaBiblioteca {
 		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());
 	}
 
-	public void adicionarObservador(String codigoUsuario, String codigoLivro) {
+	public void commandAdicionarObservador(String codigoUsuario, String codigoLivro) {
 
 		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
 
@@ -186,7 +186,7 @@ public class SistemaBiblioteca {
 		}
 			}
 	
-	public void sairAplicacao() {
+	public void commandSair() {
 			System.out.println("Saindo da aplicação...");
 			System.exit(0);
 		}

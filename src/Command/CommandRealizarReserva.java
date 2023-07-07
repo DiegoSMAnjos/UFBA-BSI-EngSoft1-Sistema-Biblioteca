@@ -6,7 +6,7 @@ public class CommandRealizarReserva implements Command{
 
 	@Override
 	public void execute(String[] args){
-		SistemaBiblioteca.getInstance().realizarReservaLivro(args[1], args[2]);		
+		SistemaBiblioteca.getInstance().commandRealizarReserva(args[1], args[2]);		
 		
 	}
 

@@ -28,7 +28,7 @@ public class Main {
 		bib.getListaLivros().add(new Livro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language","Addison-Wesley Professional","Martin Fowler", "3ª", "2003"));
 		bib.getListaExemplares().add(new Exemplar("100", "01"));
 		
-		bib.realizarEmprestimoLivro("123", "400");
+		bib.commandRealizarEmprestimo("123", "400");
 		
 		System.out.println("Seja Bem-vindo ao Sistema de Biblioteca!\n\nInsira um comando: ");
 		try (Scanner sc = new Scanner(System.in)) {
