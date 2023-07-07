@@ -27,6 +27,15 @@ public class AlunoGraduacao implements IUsuario{
 
 	}
 	
+	public String getNome() {
+		return nome;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+	
+	
 	@Override
 	public void emprestimoLivro(String codigoLivro) throws Exception {
 		if (emprestimosAtuais.size() >= limiteEmprestimos) {
@@ -95,7 +104,7 @@ public class AlunoGraduacao implements IUsuario{
 	}
 	@Override
 	public void adicionarReservaHistorico(Reserva reserva) {
-		reserva.setReservaAtiva(false);
+		reserva.setIsAtiva(false);
 		historicoReservas.add(reserva);
 		
 	}
@@ -150,15 +159,6 @@ public class AlunoGraduacao implements IUsuario{
 	}
 	
 	
-	@Override
-	public String getCodigo() {
-		return this.codigo;
-	}
-	
-	@Override
-	public String getNome() {
-		return this.nome;
-	}
 	
 	public List<Emprestimo> getHistoricoEmprestimos() {
 		return this.emprestimos;
@@ -175,35 +175,7 @@ public class AlunoGraduacao implements IUsuario{
 	public List<Reserva> getReservasAtuais() {
 		return this.reservasAtuais;
 	}
+
+
 	
-	
-	@Override
-	public String exibir() {
-		String todosEmprestimos = "";
-		String todasReservas = "";
-		int i = 0;
-		for (i = 0; i < this.emprestimosAtuais.size(); i++) {
-			todosEmprestimos += (" \n / Título do Livro: " + this.emprestimosAtuais.get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + this.emprestimosAtuais.get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
-							+ this.emprestimosAtuais.get(i).getDataDevolucaoPrevisao().toString());
-		}
-		
-		for (i = 0; i < this.emprestimos.size(); i++) {
-			todosEmprestimos += ("\n / Título do Livro: " + this.emprestimos.get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + this.emprestimos.get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
-							+ this.emprestimos.get(i).getDataDevolucaoReal().toString());
-		}
-		for (i = 0; i < this.reservasAtuais.size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + this.reservasAtuais.get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + this.reservasAtuais.get(i).getData());
-		}
-		for (i = 0; i < this.historicoReservas.size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + this.historicoReservas.get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + this.historicoReservas.get(i).getData());
-		}
-		return todosEmprestimos + todasReservas; 
-		
-	}
 }

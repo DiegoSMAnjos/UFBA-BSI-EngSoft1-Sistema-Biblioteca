@@ -1,5 +1,7 @@
 package Principal;
 
+import java.util.List;
+
 public interface IUsuario {
 	public void emprestimoLivro(String codigoLivro) throws Exception;
 
@@ -10,10 +12,18 @@ public interface IUsuario {
 	public void removerReservaAtual(Livro livro);
 
 	public void adicionarReservaHistorico(Reserva reserva);
+
+	public List<Emprestimo> getEmprestimosAtuais();
+
+	public List<Emprestimo> getHistoricoEmprestimos();
 	
-	public String getNome();
+	public List<Reserva> getReservasAtuais();
+	
+	public List<Reserva> getHistoricoReservas();
 	
 	public String getCodigo();
 	
-	public String exibir();
+	public String getNome();
+	
+
 }

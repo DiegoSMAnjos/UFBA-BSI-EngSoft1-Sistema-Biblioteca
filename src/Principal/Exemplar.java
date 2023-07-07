@@ -1,15 +1,22 @@
 package Principal;
 
+import Fachada.SistemaBiblioteca;
+
 public class Exemplar {
 	private String codigo;
 	private Livro livro;
 	private String status;
 	
-	public Exemplar(String codigo, Livro livro, String status) {
-		super();
+	public Exemplar(String codigoLivro, String codigo) {
 		this.codigo = codigo;
-		this.livro = livro;
-		this.status = status;
+	    Livro livro = SistemaBiblioteca.getInstanciaSistemaBiblioteca().getLivroByCodigo(codigoLivro);
+
+	    if (livro != null) {
+	        this.livro = livro;
+	        this.status = "Disponível";
+	    } else {
+	        throw new IllegalArgumentException("Livro não encontrado na lista.");
+	    }
 	}
 
 	public String getCodigo() {

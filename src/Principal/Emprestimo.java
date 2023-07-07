@@ -6,7 +6,7 @@ public class Emprestimo {
 
 	private IUsuario usuario; 
 	private Livro livro; 
-	private boolean emprestimoAtivo; 
+	private boolean emprestimoAtivo;
 	private LocalDate dataEmprestimo; 
 	private LocalDate dataDevolucaoPrevisao;
 	private LocalDate dataDevolucaoReal;

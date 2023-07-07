@@ -10,6 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		SistemaBiblioteca biblioteca = SistemaBiblioteca.getInstanciaSistemaBiblioteca();
+		
 		biblioteca.getListaUsuarios().add(new AlunoGraduacao("João da Silva", "123"));
 		biblioteca.getListaUsuarios().add(new AlunoPosGraduacao("Luiz Fernando Rodrigues", "456"));
 		biblioteca.getListaUsuarios().add(new AlunoGraduacao("Pedro Paulo", "789"));
@@ -25,6 +26,8 @@ public class Main {
 		biblioteca.getListaLivros().add(new Livro("400", "Design Patterns: Elements of Reusable Object-Oriented Software","Addison-Wesley Professional","Erich Gamma,Richard Helm, Ralph Johnson, John Vlissides", "1ª", "1994"));
 		biblioteca.getListaLivros().add(new Livro("301","Software Metrics: A Rigorous and Practical Approach", "CRC Press", "Norman Fenton,James Bieman", "3ª", "2014"));
 		biblioteca.getListaLivros().add(new Livro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language","Addison-Wesley Professional","Martin Fowler", "3ª", "2003"));
+		biblioteca.realizarEmprestimoLivro("123", "400");
+		
 		System.out.println("Sistema de Biblioteca\n\nInsira um comando: ");
 		try (Scanner sc = new Scanner(System.in)) {
 			while(true) {

@@ -29,6 +29,14 @@ public class Professor implements IUsuario, Observer{
 
 	}
 	
+	public String getNome() {
+		return nome;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+	
 	@Override
 	public void emprestimoLivro(String codigoLivro) throws Exception {
 		if (this.verificaDevedor()) {
@@ -98,7 +106,7 @@ public class Professor implements IUsuario, Observer{
 	}
 	@Override
 	public void adicionarReservaHistorico(Reserva reserva) {
-		reserva.setReservaAtiva(false);
+		reserva.setIsAtiva(false);
 		historicoReservas.add(reserva);
 		
 	}
@@ -163,15 +171,6 @@ public class Professor implements IUsuario, Observer{
 		return this.quantidadeNotificacoes; 
 	}
 	
-	@Override
-	public String getCodigo() {
-		return this.codigo;
-	}
-	
-	@Override
-	public String getNome() {
-		return this.nome;
-	}
 	
 	public List<Emprestimo> getHistoricoEmprestimos() {
 		return this.emprestimos;
@@ -189,37 +188,6 @@ public class Professor implements IUsuario, Observer{
 	}
 	
 	
-	
-	@Override
-	public String exibir() {
-		String todosEmprestimos = "";
-		String todasReservas = "";
-		int i = 0;
-		for (i = 0; i < this.emprestimosAtuais.size(); i++) {
-			todosEmprestimos += (" \n / Título do Livro: " + this.emprestimosAtuais.get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + this.emprestimosAtuais.get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
-							+ this.emprestimosAtuais.get(i).getDataDevolucaoPrevisao().toString());
-		}
-		
-		for (i = 0; i < this.emprestimos.size(); i++) {
-			todosEmprestimos += ("\n / Título do Livro: " + this.emprestimos.get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + this.emprestimos.get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
-							+ this.emprestimos.get(i).getDataDevolucaoReal().toString());
-		}
-		for (i = 0; i < this.reservasAtuais.size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + this.reservasAtuais.get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + this.reservasAtuais.get(i).getData());
-		}
-		for (i = 0; i < this.historicoReservas.size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + this.historicoReservas.get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + this.historicoReservas.get(i).getData());
-		}
-		
-		return todosEmprestimos + todasReservas; 
-		
-	}
 	@Override
 	public void update(Livro livro) {
 		System.out.println("Existem mais de dois exemplares do livro: / Titulo: " + livro.getTitulo()

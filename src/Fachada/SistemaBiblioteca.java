@@ -16,21 +16,28 @@ import Command.CommandRealizarReserva;
 import Command.CommandSair;
 import Observer.Observer;
 import Observer.Subject;
+import Principal.Emprestimo;
 import Principal.Exemplar;
 import Principal.IUsuario;
 import Principal.Livro;
+import Principal.Reserva;
 
 public class SistemaBiblioteca {
+	private static SistemaBiblioteca instanciaBiblioteca;
 	private List<IUsuario> listaUsuarios;
 	private List<Livro> listaLivros;
-	private List<Exemplar> exemplares;
-	private static SistemaBiblioteca instanciaBiblioteca;
+	private List<Exemplar> listaExemplares;
+	private List<Reserva> listaReservas;
+	private List<Emprestimo> listaEmprestimos;
+
 	private Map<String, Command> commands;
 
 
 	private SistemaBiblioteca() {
 		this.listaUsuarios = new ArrayList<IUsuario>();
 		this.listaLivros = new ArrayList<Livro>();
+		this.listaExemplares = new ArrayList<Exemplar>();
+		this.listaReservas = new ArrayList<Reserva>();
 		this.commands = new HashMap<>();
 		this.getCommands().put("dev", new CommandRealizarDevolucao());
 		this.getCommands().put("res", new CommandRealizarReserva());
@@ -56,10 +63,22 @@ public class SistemaBiblioteca {
 	public List<Livro> getListaLivros() {
 		return this.listaLivros;
 	}
+
+	public List<Exemplar> getExemplares() {
+		return listaExemplares;
+	}
+
+	public List<Reserva> getListaReservas() {
+		return listaReservas;
+	}
+	public List<Emprestimo> getListaEmprestimos() {
+		return listaEmprestimos;
+	}
 	
 	public Map<String, Command> getCommands() {
 		return commands;
 	}
+	
 	public void run(String[] args) throws Exception {
 		this.getCommands().get(args[0]).execute(args);
 	}
@@ -113,11 +132,40 @@ public class SistemaBiblioteca {
 
 	public void consultarUsuarioPeloCodigo(String codigoUsuario) {
 		try {
-			System.out.println(obterUsuario(codigoUsuario).exibir());
+			System.out.println(SistemaBiblioteca.getInstanciaSistemaBiblioteca().exibir(obterUsuario(codigoUsuario)));
 		} catch (Exception e) {
 			System.out.println("Não foi possível encontrar o usuário! " + e.getMessage());
 		}
 
+	}
+	
+	public String exibir(IUsuario usuario) {
+		String todosEmprestimos = "";
+		String todasReservas = "";
+		int i = 0;
+		for (i = 0; i < usuario.getEmprestimosAtuais().size(); i++) {
+			todosEmprestimos += (" \n / Título do Livro: " + usuario.getEmprestimosAtuais().get(i).getLivro().getTitulo()
+							+ " / Data do Empréstimo: " + usuario.getEmprestimosAtuais().get(i).getDataEmprestimo()
+							+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
+							+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
+		}
+		
+		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
+			todosEmprestimos += ("\n / Título do Livro: " + usuario.getHistoricoEmprestimos().get(i).getLivro().getTitulo()
+							+ " / Data do Empréstimo: " + usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
+							+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
+							+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
+		}
+		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
+			todasReservas += ("\n / Título do Livro: " + usuario.getReservasAtuais().get(i).getLivro().getTitulo()
+							+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
+		}
+		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
+			todasReservas += ("\n / Título do Livro: " + usuario.getHistoricoReservas().get(i).getLivro().getTitulo()
+							+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
+		}
+		return todosEmprestimos + todasReservas; 
+		
 	}
 
 	public void consultarLivroPeloCodigo(String codigoLivro) {
@@ -142,12 +190,14 @@ public class SistemaBiblioteca {
 			System.exit(0);
 		}
 
-	public List<Exemplar> getExemplares() {
-		return exemplares;
+	public Livro getLivroByCodigo(String codigoLivro) {
+
+		for (Livro livro : listaLivros)
+		if (livro.getCodigoLivro().equals(codigoLivro)) {
+			return livro;
+		}
+		return null;
 	}
-
-
-
 
 
 	}

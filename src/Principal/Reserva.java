@@ -6,13 +6,13 @@ public class Reserva {
 	private IUsuario usuario;
 	private Livro livro;
 	private LocalDate data;
-	private boolean reservaAtiva;
+	private boolean isAtiva;
 
 	public Reserva(IUsuario usuario, Livro livro) {
 		this.usuario = usuario;
 		this.livro = livro;
 		this.data = LocalDate.now();
-		this.reservaAtiva = true;
+		this.isAtiva = true;
 	}
 
 	public IUsuario getUsuario() {
@@ -23,12 +23,12 @@ public class Reserva {
 		return data;
 	}
 
-	public boolean getReservaAtiva() {
-		return reservaAtiva;
+	public boolean getIsAtiva() {
+		return isAtiva;
 	}
 
-	public void setReservaAtiva(boolean value) {
-		this.reservaAtiva = value;
+	public void setIsAtiva(boolean value) {
+		this.isAtiva = value;
 	}
 
 	public Livro getLivro() {
