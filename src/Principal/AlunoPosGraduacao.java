@@ -14,10 +14,6 @@ public class AlunoPosGraduacao implements IUsuario{
 	private int limiteEmprestimos = 4;
 	private int limiteReservas = 3;
 	private int devolucao = 4;
-	private List<Reserva> historicoReservas;
-	private List<Reserva> reservasAtuais;
-	private List<Emprestimo> emprestimos;
-	private List<Emprestimo> emprestimosAtuais;
 	
 	public AlunoPosGraduacao(String nome, String codigo) {
 		this.nome = nome;
@@ -134,24 +130,7 @@ public class AlunoPosGraduacao implements IUsuario{
 		}
 		return null;
 	}
-	
-	private Emprestimo obterEmprestimoAtual(String codigoLivro) {
 
-		List<Emprestimo> emprestimos = emprestimosAtuais.stream()
-				.filter(emprestimo -> emprestimo.getLivro().getCodigoLivro().equals(codigoLivro)).toList();
-		if (emprestimos.size() > 0) {
-			return emprestimos.get(0);
-		}
-		return null;
-	}
-	
-	private List<Livro> getLivrosDisponiveis(String codigo) {
-
-		return SistemaBiblioteca.getInstance().getListaLivros().stream()
-				.filter(l -> l.getStatus().equals("Livre"))
-				.filter(livro -> livro.getCodigoLivro().equals(codigo)).toList();
-
-	}
 
 
 
@@ -160,21 +139,5 @@ public class AlunoPosGraduacao implements IUsuario{
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
 	
-	
-	public List<Emprestimo> getHistoricoEmprestimos() {
-		return this.emprestimos;
-	}
-	
-	public List<Reserva> getHistoricoReservas() {
-		return this.historicoReservas;
-	}
-	
-	public List<Emprestimo> getEmprestimosAtuais() {
-		return this.emprestimosAtuais;
-	}
-	
-	public List<Reserva> getReservasAtuais() {
-		return this.reservasAtuais;
-	}
 	
 }

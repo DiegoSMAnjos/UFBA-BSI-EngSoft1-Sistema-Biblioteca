@@ -1,11 +1,16 @@
 package Principal;
 
-import Fachada.SistemaBiblioteca;
+import java.util.List;
 
-public class Exemplar {
+import Fachada.SistemaBiblioteca;
+import Observer.Observer;
+import Observer.Subject;
+
+public class Exemplar implements Subject{
 	private String codigo;
 	private Livro livro;
 	private String status;
+	private List<Observer> observadores;
 	
 	public Exemplar(String codigoLivro, String codigo) {
 		this.codigo = codigo;
@@ -41,6 +46,24 @@ public class Exemplar {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public void addObserver(Observer observador) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeObserver(Observer observador) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyObserver(Livro livro) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

@@ -223,4 +223,29 @@ public class SistemaBiblioteca {
 		return reservasAtuais;
 	}
 
+	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
+		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
+		for (Exemplar exemplar : listaExemplares) {
+			if (exemplar.getLivro().getCodigoLivro().equals(codLivro)) {
+				listaExemplaresLivro.add(exemplar);
+			}
+		}
+		return listaExemplaresLivro;
+		
+	}
+	
+	public List<Exemplar> getExemplaresDisponiveis (String codigoLivro) {
+		
+		List<Exemplar> exemplares = this.getExemplaresByCodLivro(codigoLivro);
+		List<Exemplar> exemplaresDisponiveis = new ArrayList<>();
+		for (Exemplar exemplar : exemplares) {
+			if (exemplar.getStatus().equals("Disponível")) {
+				exemplaresDisponiveis.add(exemplar);
+			}
+		}
+		
+		return exemplaresDisponiveis;
+
+	}
+
 }
