@@ -168,7 +168,7 @@ public class SistemaBiblioteca {
 		int i = 0;
 		for (i = 0; i < usuario.getEmprestimosAtuais().size(); i++) {
 			todosEmprestimos += (" \n / Título do Livro: "
-					+ usuario.getEmprestimosAtuais().get(i).getLivro().getTitulo() + " / Data do Empréstimo: "
+					+ usuario.getEmprestimosAtuais().get(i).getExemplar().getLivro().getTitulo() + " / Data do Empréstimo: "
 					+ usuario.getEmprestimosAtuais().get(i).getDataEmprestimo() + " / Situação do Empréstimo: Em curso"
 					+ " / Data de Devolução: "
 					+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
@@ -176,17 +176,17 @@ public class SistemaBiblioteca {
 
 		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
 			todosEmprestimos += ("\n / Título do Livro: "
-					+ usuario.getHistoricoEmprestimos().get(i).getLivro().getTitulo() + " / Data do Empréstimo: "
+					+ usuario.getHistoricoEmprestimos().get(i).getExemplar().getLivro().getTitulo() + " / Data do Empréstimo: "
 					+ usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
 					+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
 					+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
 		}
 		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + usuario.getReservasAtuais().get(i).getLivro().getTitulo()
+			todasReservas += ("\n / Título do Livro: " + usuario.getReservasAtuais().get(i).getExemplar().getLivro().getTitulo()
 					+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
 		}
 		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + usuario.getHistoricoReservas().get(i).getLivro().getTitulo()
+			todasReservas += ("\n / Título do Livro: " + usuario.getHistoricoReservas().get(i).getExemplar().getLivro().getTitulo()
 					+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
 		}
 		return todosEmprestimos + todasReservas;

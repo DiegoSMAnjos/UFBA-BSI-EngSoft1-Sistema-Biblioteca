@@ -15,7 +15,6 @@ public class Livro implements Subject{
 	private String autor;
 	private String edicao;
 	private String anoPublicacao;
-	private String status;
 	private IUsuario usuarioAlugado;
 	private Reserva reservaAtual;
 	private Emprestimo emprestimoAtual;
@@ -30,7 +29,6 @@ public class Livro implements Subject{
 		this.editora = editora;
 		this.edicao = edicao;
 		this.anoPublicacao = anopublicacao;
-		this.status = "Livre";
 		this.reservas = new ArrayList<>();
 		this.observadores = new ArrayList<>();
 	}
@@ -73,9 +71,6 @@ public class Livro implements Subject{
 		return codigoExemplar;
 	}
 	
-	public String getStatus() {
-		return this.status;
-	}
 
 	public Reserva getReservaAtual() {
 		return reservaAtual;
@@ -84,30 +79,30 @@ public class Livro implements Subject{
 	public List<Reserva> getReservas() {
 		return reservas;
 	}
-	
-	public void devolverItem(IUsuario usuario, Livro livro, Emprestimo emprestimo) {
+	/*
+	public void devolverItem(IUsuario usuario, Exemplar exemplar, Emprestimo emprestimo) {
 		this.usuarioAlugado = null;
-		this.status = "Livre";
+		exemplar.setStatus("Disponível");
 		this.emprestimoAtual = null;
 
 	}
 	
 	public void reservarItem(IUsuario usuario, Reserva reserva) {
 		this.reservaAtual = reserva;
-		this.status = "Reservado";
+		reserva.getExemplar().setStatus("Reservado");
 		if (getLivrosReservadoCodigo(this).size() > LimiteReservasObserver) {
 			notifyObserver(this);
 		}
 
-	}
-	
+	}*/
+	/*
 	private List<Livro> getLivrosReservadoCodigo(Livro livro) {
 
 		return SistemaBiblioteca.getInstance().getListaLivros().stream()
 				.filter(liv -> liv.getCodigoLivro().equals(this.getCodigoLivro()))
 				.filter(l -> l.getStatus().equals("Reservado")).toList();
-	}
-	
+	}*/
+	/*
 	public void emprestarItem(IUsuario usuario, Emprestimo emprestimo) {
 		this.status = "Emprestado";
 
@@ -140,8 +135,8 @@ public class Livro implements Subject{
 		Livro livro = (Livro) obj;
 
 		return ((livro.getCodigoExemplar() == this.codigoExemplar) && (livro.getCodigoLivro().equals(this.codigo)));
-	}
-	
+	}*/
+	/*
 	
 	public String exibir() {
 		
@@ -161,7 +156,7 @@ public class Livro implements Subject{
 				+ emprestimo;
 
 		return exibicao;
-	}
+	}*/
 
 	@Override
 	public void addObserver(Observer observador) {

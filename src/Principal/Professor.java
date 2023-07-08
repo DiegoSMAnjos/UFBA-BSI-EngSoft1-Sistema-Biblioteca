@@ -13,19 +13,11 @@ public class Professor implements IUsuario, Observer{
 	private String codigo;
 	private int limiteReservas = 3;
 	private int devolucao = 7;
-	private List<Reserva> historicoReservas;
-	private List<Reserva> reservasAtuais;
-	private List<Emprestimo> emprestimos;
-	private List<Emprestimo> emprestimosAtuais;
 	private int quantidadeNotificacoes = 0;
 	
 	public Professor(String nome, String codigo) {
 		this.nome = nome;
 		this.codigo = codigo;
-		this.historicoReservas = new ArrayList<>();
-		this.reservasAtuais = new ArrayList<>();
-		this.emprestimos = new ArrayList<>();
-		this.emprestimosAtuais = new ArrayList<>();
 
 	}
 	
@@ -64,7 +56,7 @@ public class Professor implements IUsuario, Observer{
 			throw new Exception("O livro não está disponível!");
 
 		} else {
-			adicionarEmprestimo(reserva.getLivro());
+			adicionarEmprestimo(reserva.getExemplar());
 		}
 		
 	}
@@ -100,8 +92,8 @@ public class Professor implements IUsuario, Observer{
 		
 	}
 	@Override
-	public void removerReservaAtual(Livro livro) {
-		reservasAtuais.removeIf(reserva -> reserva.getLivro().equals(livro));
+	public void removerReservaAtual(Exemplar exemplar) {
+		reservasAtuais.removeIf(reserva -> reserva.getExemplar().equals(exemplar));
 		
 	}
 	@Override
@@ -112,10 +104,10 @@ public class Professor implements IUsuario, Observer{
 	}
 	
 	
-	private void adicionarEmprestimo(Livro livro) {
-		Emprestimo emprestimo = new Emprestimo(this, livro, LocalDate.now(),
+	private void adicionarEmprestimo(Exemplar exemplar) {
+		Emprestimo emprestimo = new Emprestimo(this, exemplar, LocalDate.now(),
 				LocalDate.now().plusDays(devolucao));
-		livro.emprestarItem(this, emprestimo);
+		exemplar.emprestarItem(this, emprestimo);
 		emprestimosAtuais.add(emprestimo);
 	}
 	
@@ -169,22 +161,6 @@ public class Professor implements IUsuario, Observer{
 	@Override
 	public int getQuantidadeNotificacoes() {
 		return this.quantidadeNotificacoes; 
-	}
-	
-	
-	public List<Emprestimo> getHistoricoEmprestimos() {
-		return this.emprestimos;
-	}
-	
-	public List<Reserva> getHistoricoReservas() {
-		return this.historicoReservas;
-	}
-	public List<Emprestimo> getEmprestimosAtuais() {
-		return this.emprestimosAtuais;
-	}
-	
-	public List<Reserva> getReservasAtuais() {
-		return this.reservasAtuais;
 	}
 	
 	

@@ -5,27 +5,27 @@ import java.time.LocalDate;
 public class Emprestimo {
 
 	private IUsuario usuario; 
-	private Livro livro; 
-	private boolean emprestimoAtivo;
+	private Exemplar exemplar; 
+	private boolean isAtivo;
 	private LocalDate dataEmprestimo; 
 	private LocalDate dataDevolucaoPrevisao;
 	private LocalDate dataDevolucaoReal;
 	
-public Emprestimo(IUsuario usuario, Livro livro, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevisao) {
+public Emprestimo(IUsuario usuario, Exemplar exemplar, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevisao) {
 		super();
 		this.usuario = usuario;
-		this.livro = livro;
+		this.exemplar = exemplar;
 		this.dataEmprestimo = dataEmprestimo;
 		this.dataDevolucaoPrevisao = dataDevolucaoPrevisao;
-		this.emprestimoAtivo = true;
+		this.isAtivo = true;
 	}
 
 
 public IUsuario getUsuario() {
 	return usuario; 
 }
-public Livro getLivro() {
-	return livro; 
+public Exemplar getExemplar() {
+	return exemplar; 
 }
 public LocalDate getDataEmprestimo() {
 	return dataEmprestimo; 
@@ -37,7 +37,7 @@ public LocalDate getDataDevolucaoReal() {
 	return dataDevolucaoReal; 
 }
 public boolean getEmprestimoAtivo() {
-	return emprestimoAtivo; 
+	return isAtivo; 
 }
 
 public void setDataDevolucaoReal(LocalDate data) {

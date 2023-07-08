@@ -12,18 +12,11 @@ public class AlunoGraduacao implements IUsuario{
 	private int limiteEmprestimos = 3;
 	private int limiteReservas = 3;
 	private int devolucao = 3;
-	private List<Reserva> historicoReservas;
-	private List<Reserva> reservasAtuais;
-	private List<Emprestimo> emprestimos;
-	private List<Emprestimo> emprestimosAtuais;
+
 	
 	public AlunoGraduacao(String nome, String codigo) {
 		this.nome = nome;
 		this.codigo = codigo;
-		this.historicoReservas = new ArrayList<>();
-		this.reservasAtuais = new ArrayList<>();
-		this.emprestimos = new ArrayList<>();
-		this.emprestimosAtuais = new ArrayList<>();
 
 	}
 	
@@ -35,21 +28,7 @@ public class AlunoGraduacao implements IUsuario{
 		return codigo;
 	}
 	
-	public List<Emprestimo> getHistoricoEmprestimos() {
-		return this.emprestimos;
-	}
-	
-	public List<Reserva> getHistoricoReservas() {
-		return this.historicoReservas;
-	}
-	
-	public List<Emprestimo> getEmprestimosAtuais() {
-		return this.emprestimosAtuais;
-	}
-	
-	public List<Reserva> getReservasAtuais() {
-		return this.reservasAtuais;
-	}
+
 	
 	@Override
 	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {

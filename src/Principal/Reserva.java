@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 public class Reserva {
 	private IUsuario usuario;
-	private Livro livro;
+	private Exemplar exemplar;
 	private LocalDate data;
 	private boolean isAtiva;
 
-	public Reserva(IUsuario usuario, Livro livro) {
+	public Reserva(IUsuario usuario, Exemplar exemplar) {
 		this.usuario = usuario;
-		this.livro = livro;
+		this.exemplar = exemplar;
 		this.data = LocalDate.now();
 		this.isAtiva = true;
 	}
@@ -31,7 +31,7 @@ public class Reserva {
 		this.isAtiva = value;
 	}
 
-	public Livro getLivro() {
-		return livro;
+	public Exemplar getExemplar() {
+		return exemplar;
 	}
 }

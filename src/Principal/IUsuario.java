@@ -11,17 +11,9 @@ public interface IUsuario {
 
 	public void devolverLivro(String codigolivro);
 	
-	public void removerReservaAtual(Livro livro);
+	public void removerReservaAtual(Exemplar exemplar);
 
 	public void adicionarReservaHistorico(Reserva reserva);
-
-	public List<Emprestimo> getEmprestimosAtuais();
-
-	public List<Emprestimo> getHistoricoEmprestimos();
-	
-	public List<Reserva> getReservasAtuais();
-	
-	public List<Reserva> getHistoricoReservas();
 	
 	public String getCodigo();
 	
