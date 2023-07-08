@@ -3,90 +3,68 @@ package Principal;
 import java.time.LocalDate;
 import java.util.List;
 import Fachada.SistemaBiblioteca;
+import Strategy.DevolucaoAlunoGradStrategy;
+import Strategy.DevolucaoStrategy;
+import Strategy.EmprestimoAlunoGradStrategy;
+import Strategy.EmprestimoStrategy;
+import Strategy.ReservaAlunoGradStrategy;
+import Strategy.ReservaStrategy;
+
 import java.util.ArrayList;
 
-public class AlunoGraduacao implements IUsuario {
+public class AlunoGrad implements IUsuario {
 	private String nome;
-	private String codigo;
-	private int limiteEmprestimos = 3;
-	private int limiteReservas = 3;
-	private int devolucao = 3;
 
-	public AlunoGraduacao(String nome, String codigo) {
+	private String codigo;
+	private EmprestimoStrategy emprestimoStrategy;
+	private ReservaStrategy reservaStrategy;
+	private DevolucaoStrategy devolucaoStrategy;
+
+	public AlunoGrad(String nome, String codigo) {
 		this.nome = nome;
 		this.codigo = codigo;
-
+		this.emprestimoStrategy = new EmprestimoAlunoGradStrategy();
+		this.reservaStrategy = new ReservaAlunoGradStrategy();
+		this.devolucaoStrategy = new DevolucaoAlunoGradStrategy();
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public EmprestimoStrategy getEmprestimoStrategy() {
+		return emprestimoStrategy;
+	}
+
+	public void setEmprestimoStrategy(EmprestimoStrategy emprestimoStrategy) {
+		this.emprestimoStrategy = emprestimoStrategy;
+	}
+
+	public ReservaStrategy getReservaStrategy() {
+		return reservaStrategy;
+	}
+
+	public void setReservaStrategy(ReservaStrategy reservaStrategy) {
+		this.reservaStrategy = reservaStrategy;
+	}
+
+	public DevolucaoStrategy getDevolucaoStrategy() {
+		return devolucaoStrategy;
+	}
+
+	public void setDevolucaoStrategy(DevolucaoStrategy devolucaoStrategy) {
+		this.devolucaoStrategy = devolucaoStrategy;
+	}
+
 	public String getCodigo() {
 		return codigo;
 	}
 
-	@Override
-	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		if (bib.getEmprestimosAtuais(this).size() >= limiteEmprestimos) {
-			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
-		}
-		if (this.verificaDevedor(bib)) {
-			throw new Exception("O usuário está com status devedor!");
-		}
-		if (this.emprestimosAtuais.stream().anyMatch(emp -> emp.getLivro().getCodigoLivro().equals(codigoLivro))) {
-			throw new Exception("O usuário já pegou este livro emprestado!");
-		}
 
-		Reserva reserva = obterReserva(codigoLivro);
-
-		if (reserva == null) {
-
-			List<Livro> livrosDisponiveis = getLivrosDisponiveis(codigoLivro);
-
-			if (livrosDisponiveis.size() <= 0) {
-				throw new Exception("Esse livro não está disponível!");
-			}
-
-			adicionarEmprestimo(livrosDisponiveis.get(0));
-
-		} else {
-			adicionarEmprestimo(reserva.getLivro());
-		}
-
-	}
-
-	@Override
-	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		if (reservasAtuais.size() >= limiteReservas) {
-			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
-		}
-		if (this.verificaDevedor(bib)) {
-			throw new Exception("O usuário está com status devedor!");
-		}
-		if (this.reservasAtuais.stream().anyMatch(res -> res.getLivro().getCodigoLivro().equals(codigoLivro))) {
-			throw new Exception("O usuário já reservou este livro!");
-		}
-
-		List<Livro> livrosDisponiveis = getLivrosDisponiveis(codigoLivro);
-
-		if (livrosDisponiveis.size() > 0) {
-			adicionarReserva(livrosDisponiveis.get(0));
-		} else {
-			throw new Exception("O livro não possui exemplares disponíveis");
-		}
-
-	}
-
-	@Override
-	public void devolverLivro(String codigoLivro) {
-		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
-		emprestimo.setDataDevolucaoReal(LocalDate.now());
-		emprestimos.add(emprestimo);
-		emprestimosAtuais.remove(emprestimo);
-		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
-
-	}
 
 	@Override
 	public void removerReservaAtual(Livro livro) {

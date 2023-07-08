@@ -11,9 +11,9 @@ public class Main {
 
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
 		
-		bib.getListaUsuarios().add(new AlunoGraduacao("João da Silva", "123"));
-		bib.getListaUsuarios().add(new AlunoPosGraduacao("Luiz Fernando Rodrigues", "456"));
-		bib.getListaUsuarios().add(new AlunoGraduacao("Pedro Paulo", "789"));
+		bib.getListaUsuarios().add(new AlunoGrad("João da Silva", "123"));
+		bib.getListaUsuarios().add(new AlunoPosGrad("Luiz Fernando Rodrigues", "456"));
+		bib.getListaUsuarios().add(new AlunoGrad("Pedro Paulo", "789"));
 		bib.getListaUsuarios().add(new Professor("Carlos Lucena", "100"));
 		bib.getListaLivros().add(new Livro("100", "Engenharia de Software", "AddisonWesley",  "Ian Sommervile", "6ª", "2000"));
 		bib.getListaLivros().add(new Livro("101", "UML - Guia do Usuário", "Campus", "Grady Booch, James Rumbaugh, Ivar Jacobson", "7ª", "2000"));

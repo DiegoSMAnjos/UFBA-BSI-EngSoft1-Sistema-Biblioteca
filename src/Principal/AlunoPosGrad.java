@@ -8,14 +8,14 @@ import Fachada.SistemaBiblioteca;
 import java.util.ArrayList;
 
 
-public class AlunoPosGraduacao implements IUsuario{
+public class AlunoPosGrad implements IUsuario{
 	private String nome;
 	private String codigo;
-	private int limiteEmprestimos = 4;
+
 	private int limiteReservas = 3;
 	private int devolucao = 4;
 	
-	public AlunoPosGraduacao(String nome, String codigo) {
+	public AlunoPosGrad(String nome, String codigo) {
 		this.nome = nome;
 		this.codigo = codigo;
 		this.historicoReservas = new ArrayList<>();
@@ -36,31 +36,7 @@ public class AlunoPosGraduacao implements IUsuario{
 	
 	@Override
 	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		if (emprestimosAtuais.size() >= limiteEmprestimos) {
-			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
-		}
-		if (this.verificaDevedor()) {
-			throw new Exception("O usuário está com status devedor!");
-		}
-		if (this.emprestimosAtuais.stream().anyMatch(emp -> emp.getLivro().getCodigoLivro().equals(codigoLivro))) {
-			throw new Exception("O usuário já pegou este livro emprestado!");
-		}
-
-		Reserva reserva = obterReserva(codigoLivro);
-
-		if (reserva == null) {
-
-			List<Livro> livrosDisponiveis = getLivrosDisponiveis(codigoLivro);
-
-			if (livrosDisponiveis.size() <= 0) {
-				throw new Exception("Esse livro não está disponível!");
-			}
-
-			adicionarEmprestimo(livrosDisponiveis.get(0));
-
-		} else {
-			adicionarEmprestimo(reserva.getLivro());
-		}
+		
 		
 	}
 	@Override
