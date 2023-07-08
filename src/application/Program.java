@@ -1,20 +1,25 @@
-package Principal;
+package application;
 
 import java.util.Scanner;
 
-import Fachada.SistemaBiblioteca;
+import facade_singleton.SistemaBiblioteca;
+import model.entities.AlunoGrad;
+import model.entities.AlunoPosGrad;
+import model.entities.Exemplar;
+import model.entities.Livro;
+import model.entities.Professor;
+import model.entities.Usuario;
 
 
-public class Main {
+public class Program {
 
 	public static void main(String[] args) {
 
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
-		
-		bib.getListaUsuarios().add(new AlunoGrad("João da Silva", "123"));
-		bib.getListaUsuarios().add(new AlunoPosGrad("Luiz Fernando Rodrigues", "456"));
-		bib.getListaUsuarios().add(new AlunoGrad("Pedro Paulo", "789"));
-		bib.getListaUsuarios().add(new Professor("Carlos Lucena", "100"));
+		bib.getListaUsuarios().add(new Usuario("João da Silva","Aluno de Graduação", "123"));
+		bib.getListaUsuarios().add(new Usuario("Luiz Fernando Rodrigues", "Aluno de Pós-graduação", "456"));
+		bib.getListaUsuarios().add(new Usuario("Pedro Paulo", "Aluno de Graduação", "789"));
+		bib.getListaUsuarios().add(new Usuario("Carlos Lucena", "Professor", "100"));
 		bib.getListaLivros().add(new Livro("100", "Engenharia de Software", "AddisonWesley",  "Ian Sommervile", "6ª", "2000"));
 		bib.getListaLivros().add(new Livro("101", "UML - Guia do Usuário", "Campus", "Grady Booch, James Rumbaugh, Ivar Jacobson", "7ª", "2000"));
 		bib.getListaLivros().add(new Livro("200", "Code Complete", "Microsoft Press", "Steve McConnell", "2ª", "2014"));
@@ -33,6 +38,7 @@ public class Main {
 		bib.getListaExemplares().add(new Exemplar("400", "08"));
 		bib.getListaExemplares().add(new Exemplar("400", "09"));
 		bib.commandRealizarEmprestimo("123", "400");
+		
 		
 		System.out.println("Seja Bem-vindo ao Sistema de Biblioteca!\n\nInsira um comando: ");
 		try (Scanner sc = new Scanner(System.in)) {

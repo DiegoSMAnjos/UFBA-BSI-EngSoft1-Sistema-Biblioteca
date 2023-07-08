@@ -1,9 +1,11 @@
-package Principal;
+package model.entities;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import Fachada.SistemaBiblioteca;
+import facade_singleton.SistemaBiblioteca;
+import model.services.Emprestimo;
+import model.services.Reserva;
 
 import java.util.ArrayList;
 
@@ -12,8 +14,8 @@ public class AlunoPosGrad implements IUsuario{
 	private String nome;
 	private String codigo;
 
-	private int limiteReservas = 3;
-	private int devolucao = 4;
+	
+
 	
 	public AlunoPosGrad(String nome, String codigo) {
 		this.nome = nome;
@@ -34,54 +36,9 @@ public class AlunoPosGrad implements IUsuario{
 		return codigo;
 	}
 	
-	@Override
-	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		
-		
-	}
-	@Override
-	public void reservarLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		if (reservasAtuais.size() >= limiteReservas) {
-			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
-		}
-		if (this.verificaDevedor()) {
-			throw new Exception("O usuário está com status devedor!");
-		}
-		if (this.reservasAtuais.stream().anyMatch(res -> res.getLivro().getCodigoLivro().equals(codigoLivro))) {
-			throw new Exception("O usuário já reservou este livro!");
-		}
 
-		List<Livro> livrosDisponiveis = getLivrosDisponiveis(codigoLivro);
 
-		if (livrosDisponiveis.size() > 0) {
-			adicionarReserva(livrosDisponiveis.get(0));
-		} else {
-			throw new Exception("O livro não possui exemplares disponíveis");
-		}
-
-		
-		
-	}
-	@Override
-	public void devolverLivro(String codigoLivro) {
-		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
-		emprestimo.setDataDevolucaoReal(LocalDate.now());
-		emprestimos.add(emprestimo);
-		emprestimosAtuais.remove(emprestimo);
-		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
-		
-	}
-	@Override
-	public void removerReservaAtual(Livro livro) {
-		reservasAtuais.removeIf(reserva -> reserva.getLivro().equals(livro));
-		
-	}
-	@Override
-	public void adicionarReservaHistorico(Reserva reserva) {
-		reserva.setIsAtiva(false);
-		historicoReservas.add(reserva);
-		
-	}
+	
 	
 	
 	private void adicionarEmprestimo(Livro livro) {

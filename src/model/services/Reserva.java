@@ -1,6 +1,9 @@
-package Principal;
+package model.services;
 
 import java.time.LocalDate;
+
+import model.entities.Exemplar;
+import model.entities.IUsuario;
 
 public class Reserva {
 	private IUsuario usuario;

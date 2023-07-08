@@ -1,70 +1,49 @@
-package Principal;
+package model.entities;
 
-import java.util.List;
+import facade_singleton.SistemaBiblioteca;
 
-import Fachada.SistemaBiblioteca;
-import Observer.Observer;
-import Observer.Subject;
-
-public class Exemplar implements Subject{
+public class Exemplar {
+	private String codigoLivro;
 	private String codigo;
-	private Livro livro;
 	private String status;
-	private List<Observer> observadores;
-	
-	public Exemplar(String codigoLivro, String codigo) {
-		this.codigo = codigo;
-	    Livro livro = SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro);
 
-	    if (livro != null) {
-	        this.livro = livro;
-	        this.status = "Disponível";
-	    } else {
-	        throw new IllegalArgumentException("Livro não encontrado na lista.");
-	    }
+	public Exemplar(String codigoLivro, String codigo, String status) {
+		this.codigoLivro = codigoLivro;
+		this.codigo = codigo;
+		this.status = status;
+
+		Livro livro = SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro);
+
+		if (livro == null) {
+			throw new IllegalArgumentException("Livro não encontrado na lista.");
+		} else {
+			livro.getListaExemplares().add(this);
+		}
+	}
+
+	public String getCodigoLivro() {
+		return codigoLivro;
 	}
 
 	public String getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public Livro getLivro() {
-		return livro;
-	}
-
-	public void setLivro(Livro livro) {
-		this.livro = livro;
-	}
-
 	public String getStatus() {
 		return status;
+	}
+
+	public void setCodigoLivro(String codigoLivro) {
+		this.codigoLivro = codigoLivro;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	@Override
-	public void addObserver(Observer observador) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void removeObserver(Observer observador) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyObserver(Livro livro) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 }

@@ -1,9 +1,9 @@
-package Strategy;
+package strategy;
 
 import java.time.LocalDate;
 
-import Fachada.SistemaBiblioteca;
-import Principal.Emprestimo;
+import facade_singleton.SistemaBiblioteca;
+import model.services.Emprestimo;
 
 public class DevolucaoAlunoGradStrategy implements DevolucaoStrategy {
 

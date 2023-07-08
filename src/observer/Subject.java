@@ -1,6 +1,6 @@
-package Observer;
+package observer;
 
-import Principal.Livro;
+import model.entities.Livro;
 
 public interface Subject {
 	public void addObserver(Observer observador);

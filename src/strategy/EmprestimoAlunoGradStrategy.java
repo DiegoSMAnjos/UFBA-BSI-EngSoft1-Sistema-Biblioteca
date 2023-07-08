@@ -1,10 +1,12 @@
-package Strategy;
+package strategy;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import Fachada.SistemaBiblioteca;
-import Principal.Livro;
-import Principal.Reserva;
+import facade_singleton.SistemaBiblioteca;
+import model.entities.Livro;
+import model.services.Emprestimo;
+import model.services.Reserva;
 
 public class EmprestimoAlunoGradStrategy implements EmprestimoStrategy{
 	private int limiteEmprestimos = 3;
@@ -39,6 +41,12 @@ public class EmprestimoAlunoGradStrategy implements EmprestimoStrategy{
 			adicionarEmprestimo(reserva.getLivro());
 		}
 		
+	}
+	
+	private void adicionarEmprestimo(Livro livro) {
+		Emprestimo emprestimo = new Emprestimo(this, livro, LocalDate.now(), LocalDate.now().plusDays(devolucao));
+		livro.emprestarItem(this, emprestimo);
+		emprestimosAtuais.add(emprestimo);
 	}
 	
 }

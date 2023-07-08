@@ -1,10 +1,10 @@
-package Strategy;
+package strategy;
 
 import java.util.List;
 
-import Fachada.SistemaBiblioteca;
-import Principal.Livro;
-import Principal.Reserva;
+import facade_singleton.SistemaBiblioteca;
+import model.entities.Livro;
+import model.services.Reserva;
 
 public class EmprestimoAlunoPosGradStrategy implements EmprestimoStrategy{
 	private int limiteEmprestimos = 4;

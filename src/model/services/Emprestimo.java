@@ -1,17 +1,21 @@
-package Principal;
+package model.services;
 
 import java.time.LocalDate;
 
+import model.entities.Exemplar;
+import model.entities.IUsuario;
+import model.entities.Usuario;
+
 public class Emprestimo {
 
-	private IUsuario usuario; 
+	private Usuario usuario; 
 	private Exemplar exemplar; 
 	private boolean isAtivo;
 	private LocalDate dataEmprestimo; 
 	private LocalDate dataDevolucaoPrevisao;
 	private LocalDate dataDevolucaoReal;
 	
-public Emprestimo(IUsuario usuario, Exemplar exemplar, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevisao) {
+public Emprestimo(Usuario usuario, Exemplar exemplar, LocalDate dataEmprestimo, LocalDate dataDevolucaoPrevisao) {
 		super();
 		this.usuario = usuario;
 		this.exemplar = exemplar;
@@ -21,7 +25,7 @@ public Emprestimo(IUsuario usuario, Exemplar exemplar, LocalDate dataEmprestimo,
 	}
 
 
-public IUsuario getUsuario() {
+public Usuario getUsuario() {
 	return usuario; 
 }
 public Exemplar getExemplar() {

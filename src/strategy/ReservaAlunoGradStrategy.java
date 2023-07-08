@@ -1,13 +1,16 @@
-package Strategy;
+package strategy;
 
 import java.util.List;
 
-import Principal.Livro;
+import facade_singleton.SistemaBiblioteca;
+import model.entities.Livro;
+import model.services.Reserva;
 
 public class ReservaAlunoGradStrategy implements ReservaStrategy {
 	private int limiteReservas = 3;
+
 	@Override
-	public void realizarReserva() {
+	public void realizarReserva(String codigoLivro, SistemaBiblioteca bib) {
 		if (reservasAtuais.size() >= limiteReservas) {
 			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
 		}
@@ -24,8 +27,36 @@ public class ReservaAlunoGradStrategy implements ReservaStrategy {
 			adicionarReserva(livrosDisponiveis.get(0));
 		} else {
 			throw new Exception("O livro não possui exemplares disponíveis");
-		}		// TODO Auto-generated method stub
+		} // TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public void removerReservaAtual(Livro livro) {
+		reservasAtuais.removeIf(reserva -> reserva.getLivro().equals(livro));
+
+	}
+
+	@Override
+	public void adicionarReservaHistorico(Reserva reserva) {
+		reserva.setIsAtiva(false);
+		historicoReservas.add(reserva);
+
+	}
+	
+	private void adicionarReserva(Livro exemplar) {
+		Reserva reserva = new Reserva(this, exemplar);
+		exemplar.reservarItem(this, reserva);
+		this.reservasAtuais.add(reserva);
+	}
+	
+	private Reserva obterReserva(String codigoLivro) {
+
+		List<Reserva> reservas = reservasAtuais.stream()
+				.filter(reserva -> reserva.getLivro().getCodigoLivro().equals(codigoLivro)).toList();
+		if (reservas.size() > 0) {
+			return reservas.get(0);
+		}
+		return null;
+	}
 }

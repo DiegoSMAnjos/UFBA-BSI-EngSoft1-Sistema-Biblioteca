@@ -1,17 +1,19 @@
-package Principal;
+package model.entities;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import Fachada.SistemaBiblioteca;
-import Observer.Observer;
+import facade_singleton.SistemaBiblioteca;
+import model.services.Emprestimo;
+import model.services.Reserva;
+import observer.Observer;
 
 import java.util.ArrayList;
 
 public class Professor implements IUsuario, Observer {
 	private String nome;
 	private String codigo;
-	private int limiteReservas = 3;
+
 	private int devolucao = 7;
 	private int quantidadeNotificacoes = 0;
 
@@ -31,34 +33,7 @@ public class Professor implements IUsuario, Observer {
 
 	@Override
 	public void emprestimoLivro(String codigoLivro, SistemaBiblioteca bib) throws Exception {
-		if (this.verificaDevedor()) {
-			throw new Exception("O usuário está com status devedor!");
-		}
-		if (bib.getEmprestimosAtuais(this).stream()
-				.anyMatch(emp -> emp.getExemplar().getLivro().getCodigoLivro().equals(codigoLivro))) {
-			throw new Exception("O usuário já pegou este livro emprestado!");
-		}
-
-		Reserva reserva = obterReserva(codigoLivro);
-
-		if (reserva == null) {
-
-			List<Exemplar> livrosDisponiveis = getExemplaresDisponiveis(codigoLivro);
-			if (livrosDisponiveis.size() > 0) {
-				adicionarEmprestimo(livrosDisponiveis.get(0));
-				return;
-			}
-
-			List<Livro> livrosReservados = getExemplaresReservados(codigoLivro);
-			if (livrosReservados.size() > 0) {
-				adicionarEmprestimo(livrosReservados.get(0));
-			}
-
-			throw new Exception("O livro não está disponível!");
-
-		} else {
-			adicionarEmprestimo(reserva.getExemplar());
-		}
+		
 
 	}
 

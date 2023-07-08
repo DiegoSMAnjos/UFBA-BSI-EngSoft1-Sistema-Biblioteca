@@ -1,31 +1,33 @@
-package Fachada;
+package facade_singleton;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Command.Command;
-import Command.CommandAdicionarObservador;
-import Command.CommandConsultarLivro;
-import Command.CommandConsultarNotificacoes;
-import Command.CommandConsultarUsuario;
-import Command.CommandRealizarDevolucao;
-import Command.CommandRealizarEmprestimo;
-import Command.CommandRealizarReserva;
-import Command.CommandSair;
-import Observer.Observer;
-import Observer.Subject;
-import Principal.Emprestimo;
-import Principal.Exemplar;
-import Principal.IUsuario;
-import Principal.Livro;
-import Principal.Professor;
-import Principal.Reserva;
+import command.Command;
+import command.CommandAdicionarObservador;
+import command.CommandConsultarLivro;
+import command.CommandConsultarNotificacoes;
+import command.CommandConsultarUsuario;
+import command.CommandRealizarDevolucao;
+import command.CommandRealizarEmprestimo;
+import command.CommandRealizarReserva;
+import command.CommandSair;
+import model.entities.Exemplar;
+import model.entities.IUsuario;
+import model.entities.Livro;
+import model.entities.Professor;
+import model.entities.Usuario;
+import model.services.Emprestimo;
+import model.services.Reserva;
+import observer.Observer;
+import observer.Subject;
 
 public class SistemaBiblioteca {
 	private static SistemaBiblioteca instanciaBiblioteca;
-	private List<IUsuario> listaUsuarios;
+	private List<Usuario> listaUsuarios;
 	private List<Livro> listaLivros;
 	private List<Exemplar> listaExemplares;
 	private List<Reserva> listaReservas;
@@ -34,7 +36,7 @@ public class SistemaBiblioteca {
 	private Map<String, Command> commands;
 
 	private SistemaBiblioteca() {
-		this.listaUsuarios = new ArrayList<IUsuario>();
+		this.listaUsuarios = new ArrayList<Usuario>();
 		this.listaLivros = new ArrayList<Livro>();
 		this.listaExemplares = new ArrayList<Exemplar>();
 		this.listaReservas = new ArrayList<Reserva>();
@@ -56,7 +58,7 @@ public class SistemaBiblioteca {
 		return instanciaBiblioteca;
 	}
 
-	public List<IUsuario> getListaUsuarios() {
+	public List<Usuario> getListaUsuarios() {
 		return this.listaUsuarios;
 	}
 
@@ -158,41 +160,10 @@ public class SistemaBiblioteca {
 		System.exit(0);
 	}
 
-	public IUsuario getUsuarioByCodigo(String codigoUsuario) {
+	public Usuario getUsuarioByCodigo(String codigoUsuario) {
 		return this.listaUsuarios.stream().filter(user -> user.getCodigo().equals(codigoUsuario)).toList().get(0);
 	}
-
-	public String exibirInfoUsuario(IUsuario usuario) {
-		String todosEmprestimos = "";
-		String todasReservas = "";
-		int i = 0;
-		for (i = 0; i < usuario.getEmprestimosAtuais().size(); i++) {
-			todosEmprestimos += (" \n / Título do Livro: "
-					+ usuario.getEmprestimosAtuais().get(i).getExemplar().getLivro().getTitulo() + " / Data do Empréstimo: "
-					+ usuario.getEmprestimosAtuais().get(i).getDataEmprestimo() + " / Situação do Empréstimo: Em curso"
-					+ " / Data de Devolução: "
-					+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
-		}
-
-		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
-			todosEmprestimos += ("\n / Título do Livro: "
-					+ usuario.getHistoricoEmprestimos().get(i).getExemplar().getLivro().getTitulo() + " / Data do Empréstimo: "
-					+ usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
-					+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
-					+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
-		}
-		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + usuario.getReservasAtuais().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
-		}
-		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
-			todasReservas += ("\n / Título do Livro: " + usuario.getHistoricoReservas().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
-		}
-		return todosEmprestimos + todasReservas;
-
-	}
-
+	
 	public Livro getLivroByCodigo(String codigoLivro) {
 
 		for (Livro livro : listaLivros)
@@ -201,8 +172,54 @@ public class SistemaBiblioteca {
 			}
 		return null;
 	}
+	
+	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
+		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
+		for (Exemplar exemplar : listaExemplares) {
+			if (exemplar.getLivro().getCodigoLivro().equals(codLivro)) {
+				listaExemplaresLivro.add(exemplar);
+			}
+		}
+		return listaExemplaresLivro;
 
-	public List<Emprestimo> getEmprestimosAtuais(IUsuario usuario) {
+	}
+
+	public String exibirInfoUsuario(Usuario usuario) {
+		String todosEmprestimos = "";
+		String todasReservas = "";
+		int i = 0;
+		for (i = 0; i < this.getEmprestimosAtuais().size(); i++) {
+			todosEmprestimos += (" \n / Título do Livro: "
+					+ usuario.getEmprestimosAtuais().get(i).getExemplar().getLivro().getTitulo()
+					+ " / Data do Empréstimo: " + usuario.getEmprestimosAtuais().get(i).getDataEmprestimo()
+					+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
+					+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
+		}
+
+		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
+			todosEmprestimos += ("\n / Título do Livro: "
+					+ usuario.getHistoricoEmprestimos().get(i).getExemplar().getLivro().getTitulo()
+					+ " / Data do Empréstimo: " + usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
+					+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
+					+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
+		}
+		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
+			todasReservas += ("\n / Título do Livro: "
+					+ usuario.getReservasAtuais().get(i).getExemplar().getLivro().getTitulo()
+					+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
+		}
+		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
+			todasReservas += ("\n / Título do Livro: "
+					+ usuario.getHistoricoReservas().get(i).getExemplar().getLivro().getTitulo()
+					+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
+		}
+		return todosEmprestimos + todasReservas;
+
+	}
+
+
+
+	public List<Emprestimo> getEmprestimosAtuais(Usuario usuario) {
 		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
 		for (Emprestimo emp : listaEmprestimos) {
 			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getEmprestimoAtivo() == true) {
@@ -223,19 +240,10 @@ public class SistemaBiblioteca {
 		return reservasAtuais;
 	}
 
-	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
-		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
-		for (Exemplar exemplar : listaExemplares) {
-			if (exemplar.getLivro().getCodigoLivro().equals(codLivro)) {
-				listaExemplaresLivro.add(exemplar);
-			}
-		}
-		return listaExemplaresLivro;
-		
-	}
-	
-	public List<Exemplar> getExemplaresDisponiveis (String codigoLivro) {
-		
+
+
+	public List<Exemplar> getExemplaresDisponiveis(String codigoLivro) {
+
 		List<Exemplar> exemplares = this.getExemplaresByCodLivro(codigoLivro);
 		List<Exemplar> exemplaresDisponiveis = new ArrayList<>();
 		for (Exemplar exemplar : exemplares) {
@@ -243,9 +251,15 @@ public class SistemaBiblioteca {
 				exemplaresDisponiveis.add(exemplar);
 			}
 		}
-		
+
 		return exemplaresDisponiveis;
 
+	}
+
+	public boolean verificaDevedor(IUsuario usuario) {
+
+		return this.getEmprestimosAtuais(usuario).stream()
+				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
 
 }

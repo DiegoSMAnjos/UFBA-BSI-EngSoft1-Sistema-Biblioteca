@@ -1,6 +1,6 @@
-package Strategy;
+package strategy;
 
-import Fachada.SistemaBiblioteca;
+import facade_singleton.SistemaBiblioteca;
 
 public interface EmprestimoStrategy {
 	public void realizarEmprestimo(String codigoLivro, SistemaBiblioteca bib);
