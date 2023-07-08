@@ -33,7 +33,6 @@ public class SistemaBiblioteca {
 
 	private Map<String, Command> commands;
 
-
 	private SistemaBiblioteca() {
 		this.listaUsuarios = new ArrayList<IUsuario>();
 		this.listaLivros = new ArrayList<Livro>();
@@ -72,16 +71,68 @@ public class SistemaBiblioteca {
 	public List<Reserva> getListaReservas() {
 		return listaReservas;
 	}
+
 	public List<Emprestimo> getListaEmprestimos() {
 		return listaEmprestimos;
 	}
-	
+
 	public Map<String, Command> getCommands() {
 		return commands;
 	}
-	
+
 	public void run(String[] args) throws Exception {
 		this.getCommands().get(args[0]).execute(args);
+	}
+
+	public void commandAdicionarObservador(String codigoUsuario, String codigoLivro) {
+
+		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
+
+		this.listaLivros.forEach(liv -> {
+			Subject livro = (Subject) liv;
+			livro.addObserver(observador);
+		});
+		System.out.println("Observador Registrado com Sucesso!");
+	}
+
+	public void commandConsultarLivro(String codigoLivro) {
+		try {
+			List<Livro> livros = this.getListaLivros().stream()
+					.filter(livro -> livro.getCodigoLivro().equals(codigoLivro)).toList();
+			if (livros.size() <= 0) {
+				throw new Exception("O Livro não existe!");
+			} else {
+				livros.forEach(livro -> System.out.println(livro.exibir()));
+				System.out.println("\n Quantidade de Reservas: "
+						+ livros.stream().filter(liv -> liv.getStatus().equals("Reservado")).toList().size());
+			}
+
+		} catch (Exception e) {
+			System.out.println("Não foi possível encontrar o livro! " + e.getMessage());
+		}
+	}
+
+	public void commandConsultarNotificacoes(String codigoUsuario) {
+		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
+		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());
+	}
+
+	public void commandConsultarUsuario(String codigoUsuario) {
+		try {
+			System.out.println(SistemaBiblioteca.getInstance().exibirInfoUsuario(getUsuarioByCodigo(codigoUsuario)));
+		} catch (Exception e) {
+			System.out.println("Não foi possível encontrar o usuário! " + e.getMessage());
+		}
+
+	}
+
+	public void commandRealizarDevolucao(String codigoUsuario, String codigoLivro) {
+		try {
+			getUsuarioByCodigo(codigoUsuario).devolverLivro(codigoLivro);
+			System.out.println("Livro devolvido com sucesso!");
+		} catch (Exception e) {
+			System.out.println("Não foi possível devolver o livro! " + e.getMessage());
+		}
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
@@ -102,124 +153,74 @@ public class SistemaBiblioteca {
 		}
 	}
 
-	public void commandRealizarDevolucao(String codigoUsuario, String codigoLivro) {
-		try {
-			getUsuarioByCodigo(codigoUsuario).devolverLivro(codigoLivro);
-			System.out.println("Livro devolvido com sucesso!");
-		} catch (Exception e) {
-			System.out.println("Não foi possível devolver o livro! " + e.getMessage());
-		}
+	public void commandSair() {
+		System.out.println("Saindo da aplicação...");
+		System.exit(0);
 	}
 
 	public IUsuario getUsuarioByCodigo(String codigoUsuario) {
 		return this.listaUsuarios.stream().filter(user -> user.getCodigo().equals(codigoUsuario)).toList().get(0);
 	}
 
-	public void commandConsultarNotificacoes(String codigoUsuario) {
-		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
-		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());
-	}
-
-	public void commandAdicionarObservador(String codigoUsuario, String codigoLivro) {
-
-		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
-
-		this.listaLivros.forEach(liv -> {
-			Subject livro = (Subject) liv;
-			livro.addObserver(observador);
-		});
-		System.out.println("Observador Registrado com Sucesso!");
-	}
-
-	public void commandConsultarUsuario(String codigoUsuario) {
-		try {
-			System.out.println(SistemaBiblioteca.getInstance().exibirInfoUsuario(getUsuarioByCodigo(codigoUsuario)));
-		} catch (Exception e) {
-			System.out.println("Não foi possível encontrar o usuário! " + e.getMessage());
-		}
-
-	}
-	
 	public String exibirInfoUsuario(IUsuario usuario) {
 		String todosEmprestimos = "";
 		String todasReservas = "";
 		int i = 0;
 		for (i = 0; i < usuario.getEmprestimosAtuais().size(); i++) {
-			todosEmprestimos += (" \n / Título do Livro: " + usuario.getEmprestimosAtuais().get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + usuario.getEmprestimosAtuais().get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
-							+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
+			todosEmprestimos += (" \n / Título do Livro: "
+					+ usuario.getEmprestimosAtuais().get(i).getLivro().getTitulo() + " / Data do Empréstimo: "
+					+ usuario.getEmprestimosAtuais().get(i).getDataEmprestimo() + " / Situação do Empréstimo: Em curso"
+					+ " / Data de Devolução: "
+					+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
 		}
-		
+
 		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
-			todosEmprestimos += ("\n / Título do Livro: " + usuario.getHistoricoEmprestimos().get(i).getLivro().getTitulo()
-							+ " / Data do Empréstimo: " + usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
-							+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
-							+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
+			todosEmprestimos += ("\n / Título do Livro: "
+					+ usuario.getHistoricoEmprestimos().get(i).getLivro().getTitulo() + " / Data do Empréstimo: "
+					+ usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
+					+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
+					+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
 		}
 		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
 			todasReservas += ("\n / Título do Livro: " + usuario.getReservasAtuais().get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
+					+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
 		}
 		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
 			todasReservas += ("\n / Título do Livro: " + usuario.getHistoricoReservas().get(i).getLivro().getTitulo()
-							+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
+					+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
 		}
-		return todosEmprestimos + todasReservas; 
-		
+		return todosEmprestimos + todasReservas;
+
 	}
-
-	public void commandConsultarLivro(String codigoLivro) {
-		try {
-			List<Livro> livros = this.getListaLivros().stream()
-					.filter(livro -> livro.getCodigoLivro().equals(codigoLivro)).toList();
-			if (livros.size() <= 0) {
-				throw new Exception("O Livro não existe!");
-			} else {
-				livros.forEach(livro -> System.out.println(livro.exibir()));
-				System.out.println("\n Quantidade de Reservas: "
-						+ livros.stream().filter(liv -> liv.getStatus().equals("Reservado")).toList().size());
-			}
-
-		} catch (Exception e) {
-			System.out.println("Não foi possível encontrar o livro! " + e.getMessage());
-		}
-			}
-	
-	public void commandSair() {
-			System.out.println("Saindo da aplicação...");
-			System.exit(0);
-		}
 
 	public Livro getLivroByCodigo(String codigoLivro) {
 
 		for (Livro livro : listaLivros)
-		if (livro.getCodigoLivro().equals(codigoLivro)) {
-			return livro;
-		}
+			if (livro.getCodigoLivro().equals(codigoLivro)) {
+				return livro;
+			}
 		return null;
 	}
-	
-	public List<Emprestimo> getEmprestimosAtuais(IUsuario usuario){
+
+	public List<Emprestimo> getEmprestimosAtuais(IUsuario usuario) {
 		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
 		for (Emprestimo emp : listaEmprestimos) {
-			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getEmprestimoAtivo() == true){
+			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getEmprestimoAtivo() == true) {
 				emprestimosAtuais.add(emp);
 			}
 		}
 		return emprestimosAtuais;
-		
+
 	}
 
 	public List<Reserva> getReservasAtuais(IUsuario usuario) {
 		List<Reserva> reservasAtuais = new ArrayList<>();
 		for (Reserva res : listaReservas) {
-			if (res.getUsuario().getCodigo().equals(usuario.getCodigo()) && res.getIsAtiva() == true){
+			if (res.getUsuario().getCodigo().equals(usuario.getCodigo()) && res.getIsAtiva() == true) {
 				reservasAtuais.add(res);
 			}
 		}
 		return reservasAtuais;
 	}
 
-
-	}
+}
