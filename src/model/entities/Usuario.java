@@ -1,7 +1,7 @@
 package model.entities;
 
 import pattern.observer.Observer;
-import pattern.strategy.*;
+import pattern.strategy.EmprestimoStrategy;
 
 public class Usuario implements Observer {
 	private String codigo;
@@ -11,17 +11,9 @@ public class Usuario implements Observer {
 	private int quantidadeNotificacoes = 0;
 
 	public Usuario(String codigo, String tipoUsuario, String nome) {
-		super();
 		this.codigo = codigo;
 		this.tipoUsuario = tipoUsuario;
 		this.nome = nome;
-		if (tipoUsuario == "Aluno de Graduação") {
-			this.emprestimoStrategy = new EmprestimoAlunoGradStrategy();
-		} else if (tipoUsuario == "Aluno de Pós-graduação") {
-			this.emprestimoStrategy = new EmprestimoAlunoPosGradStrategy();
-		} else if (tipoUsuario == "Professor") {
-			this.emprestimoStrategy = new EmprestimoProfessorStrategy();
-		}
 	}
 
 	public String getCodigo() {

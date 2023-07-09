@@ -9,7 +9,6 @@ public class Exemplar {
 		this.codigoLivro = codigoLivro;
 		this.codigo = codigo;
 		this.status = status;
-
 	}
 
 	public String getCodigoLivro() {

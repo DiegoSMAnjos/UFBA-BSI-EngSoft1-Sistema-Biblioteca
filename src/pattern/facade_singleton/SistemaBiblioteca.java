@@ -85,7 +85,9 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandAdicionarObservador(String codigoUsuario, String codigoLivro) {
-
+		
+		
+		/*
 		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
 
 		this.listaLivros.forEach(liv -> {
@@ -93,9 +95,12 @@ public class SistemaBiblioteca {
 			livro.addObserver(observador);
 		});
 		System.out.println("Observador Registrado com Sucesso!");
+		*/
 	}
 
 	public void commandConsultarLivro(String codigoLivro) {
+		
+		/*
 		try {
 			List<Livro> livros = this.getListaLivros().stream()
 					.filter(livro -> livro.getCodigo().equals(codigoLivro)).toList();
@@ -109,30 +114,74 @@ public class SistemaBiblioteca {
 
 		} catch (Exception e) {
 			System.out.println("Não foi possível encontrar o livro! " + e.getMessage());
-		}
+		}*/
 	}
 
 	public void commandConsultarNotificacoes(String codigoUsuario) {
-		Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
-		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());
+		
+		/*Observer observador = (Observer) getUsuarioByCodigo(codigoUsuario);
+		System.out.printf("Quantidade de Notificações: %d", observador.getQuantidadeNotificacoes());*/
 	}
 
 	public void commandConsultarUsuario(String codigoUsuario) {
+		Usuario usuario = this.getUsuarioByCodigo(codigoUsuario);
+		if (usuario.equals(null)) {
+			System.out.println("Não foi possível encontrar o usuário!");
+		}else {
+			List<Emprestimo> emprestimosAtuais = this.getEmprestimosAtuais(usuario);
+			for () {
+				
+			}
+		}
+		/*
 		try {
-			System.out.println(SistemaBiblioteca.getInstance().exibirInfoUsuario(getUsuarioByCodigo(codigoUsuario)));
+			String todosEmprestimos = "";
+			String todasReservas = "";
+			int i = 0;
+			for (i = 0; i < this.getEmprestimosAtuais().size(); i++) {
+				todosEmprestimos += (" \n / Título do Livro: "
+						+ usuario.getEmprestimosAtuais().get(i).getExemplar().getLivro().getTitulo()
+						+ " / Data do Empréstimo: " + usuario.getEmprestimosAtuais().get(i).getDataEmprestimo()
+						+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
+						+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
+			}
+
+			for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
+				todosEmprestimos += ("\n / Título do Livro: "
+						+ usuario.getHistoricoEmprestimos().get(i).getExemplar().getLivro().getTitulo()
+						+ " / Data do Empréstimo: " + usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
+						+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
+						+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
+			}
+			for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
+				todasReservas += ("\n / Título do Livro: "
+						+ usuario.getReservasAtuais().get(i).getExemplar().getLivro().getTitulo()
+						+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
+			}
+			for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
+				todasReservas += ("\n / Título do Livro: "
+						+ usuario.getHistoricoReservas().get(i).getExemplar().getLivro().getTitulo()
+						+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
+			}
+			System.out.println(todosEmprestimos + todasReservas);
+			
 		} catch (Exception e) {
 			System.out.println("Não foi possível encontrar o usuário! " + e.getMessage());
 		}
-
+		*/
 	}
 
 	public void commandRealizarDevolucao(String codigoUsuario, String codigoLivro) {
+		
+		/*
 		try {
 			getUsuarioByCodigo(codigoUsuario).devolverLivro(codigoLivro);
 			System.out.println("Livro devolvido com sucesso!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível devolver o livro! " + e.getMessage());
 		}
+		*/
+		
 		/*
 		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
 		emprestimo.setDataDevolucaoReal(LocalDate.now());
@@ -140,26 +189,31 @@ public class SistemaBiblioteca {
 		emprestimosAtuais.remove(emprestimo);
 		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
 		 */
+
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
+
 		try {
-			getUsuarioByCodigo(codigoUsuario).emprestimoLivro(codigoLivro, this);
+			getUsuarioByCodigo(codigoUsuario).getEmprestimoStrategy().realizarEmprestimo(codigoLivro, this, instanciaBiblioteca);;
 			System.out.println("Emprestimo Realizado!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível realizar o seu emprestimo! " + e.getMessage());
 		}
+		
 	}
 
 	public void commandRealizarReserva(String codigoUsuario, String codigoLivro) {
 		int limiteReservas = 3;
 		
+		/*
 		try {
 			getUsuarioByCodigo(codigoUsuario).reservarLivro(codigoLivro, this);
 			System.out.println("Reserva Realizada!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível realizar a sua reserva! " + e.getMessage());
 		}
+		*/
 		
 		/*
 		reserva.getExemplar().setStatus("Reservado");
@@ -195,7 +249,12 @@ public class SistemaBiblioteca {
 	}
 
 	public Usuario getUsuarioByCodigo(String codigoUsuario) {
-		return this.listaUsuarios.stream().filter(user -> user.getCodigo().equals(codigoUsuario)).toList().get(0);
+		for (Usuario usuario : this.getListaUsuarios()) {
+			if (usuario.getCodigo().equals(codigoUsuario)) {
+				return usuario;
+			}
+		}
+		return null;
 	}
 	
 	public Livro getLivroByCodigo(String codigoLivro) {
@@ -217,45 +276,12 @@ public class SistemaBiblioteca {
 
 	}
 
-	public String exibirInfoUsuario(Usuario usuario) {
-		String todosEmprestimos = "";
-		String todasReservas = "";
-		int i = 0;
-		for (i = 0; i < this.getEmprestimosAtuais().size(); i++) {
-			todosEmprestimos += (" \n / Título do Livro: "
-					+ usuario.getEmprestimosAtuais().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data do Empréstimo: " + usuario.getEmprestimosAtuais().get(i).getDataEmprestimo()
-					+ " / Situação do Empréstimo: Em curso" + " / Data de Devolução: "
-					+ usuario.getEmprestimosAtuais().get(i).getDataDevolucaoPrevisao().toString());
-		}
-
-		for (i = 0; i < usuario.getHistoricoEmprestimos().size(); i++) {
-			todosEmprestimos += ("\n / Título do Livro: "
-					+ usuario.getHistoricoEmprestimos().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data do Empréstimo: " + usuario.getHistoricoEmprestimos().get(i).getDataEmprestimo()
-					+ " / Situação do Empréstimo: Finalizado" + " / Data de Devolução: "
-					+ usuario.getHistoricoEmprestimos().get(i).getDataDevolucaoReal().toString());
-		}
-		for (i = 0; i < usuario.getReservasAtuais().size(); i++) {
-			todasReservas += ("\n / Título do Livro: "
-					+ usuario.getReservasAtuais().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data de solicitação da Reserva: " + usuario.getReservasAtuais().get(i).getData());
-		}
-		for (i = 0; i < usuario.getHistoricoReservas().size(); i++) {
-			todasReservas += ("\n / Título do Livro: "
-					+ usuario.getHistoricoReservas().get(i).getExemplar().getLivro().getTitulo()
-					+ " / Data de solicitação da Reserva: " + usuario.getHistoricoReservas().get(i).getData());
-		}
-		return todosEmprestimos + todasReservas;
-
-	}
-
 
 
 	public List<Emprestimo> getEmprestimosAtuais(Usuario usuario) {
 		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
 		for (Emprestimo emp : listaEmprestimos) {
-			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getEmprestimoAtivo() == true) {
+			if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getIsAtivo() == true) {
 				emprestimosAtuais.add(emp);
 			}
 		}
@@ -272,7 +298,6 @@ public class SistemaBiblioteca {
 		}
 		return reservasAtuais;
 	}
-
 
 
 	public List<Exemplar> getExemplaresDisponiveis(String codigoLivro) {
@@ -295,11 +320,4 @@ public class SistemaBiblioteca {
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
 	
-	public void realizarDevolucao(String codigoLivro, SistemaBiblioteca bib) {
-		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
-		emprestimo.setDataDevolucaoReal(LocalDate.now());
-		emprestimos.add(emprestimo);
-		emprestimosAtuais.remove(emprestimo);
-		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
-	}
 }

@@ -42,8 +42,13 @@ public class Emprestimo {
 		return dataDevolucaoReal;
 	}
 
-	public boolean getEmprestimoAtivo() {
+	public boolean getIsAtivo() {
 		return isAtivo;
+	}
+	
+
+	public void setIsAtivo(boolean isAtivo) {
+		this.isAtivo = isAtivo;
 	}
 
 	public void setDataDevolucaoReal(LocalDate data) {

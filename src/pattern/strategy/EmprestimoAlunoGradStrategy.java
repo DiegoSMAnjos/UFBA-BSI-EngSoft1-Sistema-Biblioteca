@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import model.entities.Livro;
+import model.entities.Usuario;
 import model.services.Emprestimo;
 import model.services.Reserva;
 import pattern.facade_singleton.SistemaBiblioteca;
@@ -13,14 +14,18 @@ public class EmprestimoAlunoGradStrategy implements EmprestimoStrategy{
 	private int tempoEmprestimo = 3;
 	
 	@Override
-	public void realizarEmprestimo(String codigoLivro, SistemaBiblioteca bib) {
-		if (bib.getEmprestimosAtuais(this).size() >= maxEmprestimosAbertos) {
+	public void realizarEmprestimo(String codigoLivro, String codUsuario, SistemaBiblioteca bib) {
+		Usuario usuario = bib.getUsuarioByCodigo(codUsuario);
+		
+		if (bib.getEmprestimosAtuais(usuario).size() >= maxEmprestimosAbertos) {
 			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
+			return;
 		}
-		if (this.verificaDevedor(bib)) {
+		if (bib.verificaDevedor(usuario)) {
 			throw new Exception("O usuário está com status devedor!");
+			return;
 		}
-		if (this.emprestimosAtuais.stream().anyMatch(emp -> emp.getLivro().getCodigoLivro().equals(codigoLivro))) {
+		if (bib.getEmprestimosAtuais(usuario)) {
 			throw new Exception("O usuário já pegou este livro emprestado!");
 		}
 
