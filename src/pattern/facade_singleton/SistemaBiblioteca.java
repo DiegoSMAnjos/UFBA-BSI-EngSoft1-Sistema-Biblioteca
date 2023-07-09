@@ -1,4 +1,4 @@
-package facade_singleton;
+package pattern.facade_singleton;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,24 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import command.Command;
-import command.CommandAdicionarObservador;
-import command.CommandConsultarLivro;
-import command.CommandConsultarNotificacoes;
-import command.CommandConsultarUsuario;
-import command.CommandRealizarDevolucao;
-import command.CommandRealizarEmprestimo;
-import command.CommandRealizarReserva;
-import command.CommandSair;
 import model.entities.Exemplar;
-import model.entities.IUsuario;
 import model.entities.Livro;
-import model.entities.Professor;
 import model.entities.Usuario;
 import model.services.Emprestimo;
 import model.services.Reserva;
-import observer.Observer;
-import observer.Subject;
+import pattern.command.Command;
+import pattern.command.CommandAdicionarObservador;
+import pattern.command.CommandConsultarLivro;
+import pattern.command.CommandConsultarNotificacoes;
+import pattern.command.CommandConsultarUsuario;
+import pattern.command.CommandRealizarDevolucao;
+import pattern.command.CommandRealizarEmprestimo;
+import pattern.command.CommandRealizarReserva;
+import pattern.command.CommandSair;
+import pattern.observer.Observer;
+import pattern.observer.Subject;
 
 public class SistemaBiblioteca {
 	private static SistemaBiblioteca instanciaBiblioteca;
@@ -100,13 +98,13 @@ public class SistemaBiblioteca {
 	public void commandConsultarLivro(String codigoLivro) {
 		try {
 			List<Livro> livros = this.getListaLivros().stream()
-					.filter(livro -> livro.getCodigoLivro().equals(codigoLivro)).toList();
+					.filter(livro -> livro.getCodigo().equals(codigoLivro)).toList();
 			if (livros.size() <= 0) {
 				throw new Exception("O Livro não existe!");
 			} else {
 				livros.forEach(livro -> System.out.println(livro.exibir()));
 				System.out.println("\n Quantidade de Reservas: "
-						+ livros.stream().filter(liv -> liv.getStatus().equals("Reservado")).toList().size());
+						+ livros.stream().filter(liv -> SistemaBiblioteca.getInstance().getExemplares().getStatus().equals("Reservado")).toList().size());
 			}
 
 		} catch (Exception e) {
@@ -135,6 +133,13 @@ public class SistemaBiblioteca {
 		} catch (Exception e) {
 			System.out.println("Não foi possível devolver o livro! " + e.getMessage());
 		}
+		/*
+		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
+		emprestimo.setDataDevolucaoReal(LocalDate.now());
+		emprestimos.add(emprestimo);
+		emprestimosAtuais.remove(emprestimo);
+		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
+		 */
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
@@ -147,12 +152,41 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandRealizarReserva(String codigoUsuario, String codigoLivro) {
+		int limiteReservas = 3;
+		
 		try {
 			getUsuarioByCodigo(codigoUsuario).reservarLivro(codigoLivro, this);
 			System.out.println("Reserva Realizada!");
 		} catch (Exception e) {
 			System.out.println("Não foi possível realizar a sua reserva! " + e.getMessage());
 		}
+		
+		/*
+		reserva.getExemplar().setStatus("Reservado");
+		if (getLivrosReservadoCodigo(this).size() > LimiteReservasObserver) {
+			notifyObserver(this);
+		}*/
+		
+		
+		/*
+		if (reservasAtuais.size() >= limiteReservas) {
+			throw new Exception("Você não pode realizar mais reservas pois excedeu o limite!");
+		}
+		if (this.verificaDevedor(bib)) {
+			throw new Exception("O usuário está com status devedor!");
+		}
+		if (this.reservasAtuais.stream().anyMatch(res -> res.getLivro().getCodigoLivro().equals(codigoLivro))) {
+			throw new Exception("O usuário já reservou este livro!");
+		}
+
+		List<Livro> livrosDisponiveis = getLivrosDisponiveis(codigoLivro);
+
+		if (livrosDisponiveis.size() > 0) {
+			adicionarReserva(livrosDisponiveis.get(0));
+		} else {
+			throw new Exception("O livro não possui exemplares disponíveis");
+		}
+		*/
 	}
 
 	public void commandSair() {
@@ -165,9 +199,8 @@ public class SistemaBiblioteca {
 	}
 	
 	public Livro getLivroByCodigo(String codigoLivro) {
-
 		for (Livro livro : listaLivros)
-			if (livro.getCodigoLivro().equals(codigoLivro)) {
+			if (livro.getCodigo().equals(codigoLivro)) {
 				return livro;
 			}
 		return null;
@@ -176,7 +209,7 @@ public class SistemaBiblioteca {
 	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
 		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
 		for (Exemplar exemplar : listaExemplares) {
-			if (exemplar.getLivro().getCodigoLivro().equals(codLivro)) {
+			if (exemplar.getCodigoLivro().equals(codLivro)) {
 				listaExemplaresLivro.add(exemplar);
 			}
 		}
@@ -230,7 +263,7 @@ public class SistemaBiblioteca {
 
 	}
 
-	public List<Reserva> getReservasAtuais(IUsuario usuario) {
+	public List<Reserva> getReservasAtuais(Usuario usuario) {
 		List<Reserva> reservasAtuais = new ArrayList<>();
 		for (Reserva res : listaReservas) {
 			if (res.getUsuario().getCodigo().equals(usuario.getCodigo()) && res.getIsAtiva() == true) {
@@ -261,5 +294,12 @@ public class SistemaBiblioteca {
 		return this.getEmprestimosAtuais(usuario).stream()
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
-
+	
+	public void realizarDevolucao(String codigoLivro, SistemaBiblioteca bib) {
+		Emprestimo emprestimo = obterEmprestimoAtual(codigoLivro);
+		emprestimo.setDataDevolucaoReal(LocalDate.now());
+		emprestimos.add(emprestimo);
+		emprestimosAtuais.remove(emprestimo);
+		emprestimo.getLivro().devolverItem(this, emprestimo.getLivro(), emprestimo);
+	}
 }

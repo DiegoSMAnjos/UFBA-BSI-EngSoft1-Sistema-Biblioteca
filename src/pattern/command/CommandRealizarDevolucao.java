@@ -1,6 +1,6 @@
-package command;
+package pattern.command;
 
-import facade_singleton.SistemaBiblioteca;
+import pattern.facade_singleton.SistemaBiblioteca;
 
 public class CommandRealizarDevolucao implements Command{
 

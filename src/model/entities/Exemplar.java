@@ -1,7 +1,5 @@
 package model.entities;
 
-import facade_singleton.SistemaBiblioteca;
-
 public class Exemplar {
 	private String codigoLivro;
 	private String codigo;
@@ -12,13 +10,6 @@ public class Exemplar {
 		this.codigo = codigo;
 		this.status = status;
 
-		Livro livro = SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro);
-
-		if (livro == null) {
-			throw new IllegalArgumentException("Livro não encontrado na lista.");
-		} else {
-			livro.getListaExemplares().add(this);
-		}
 	}
 
 	public String getCodigoLivro() {
@@ -44,6 +35,5 @@ public class Exemplar {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 }

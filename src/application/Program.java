@@ -2,13 +2,10 @@ package application;
 
 import java.util.Scanner;
 
-import facade_singleton.SistemaBiblioteca;
-import model.entities.AlunoGrad;
-import model.entities.AlunoPosGrad;
 import model.entities.Exemplar;
 import model.entities.Livro;
-import model.entities.Professor;
 import model.entities.Usuario;
+import pattern.facade_singleton.SistemaBiblioteca;
 
 
 public class Program {
@@ -28,15 +25,15 @@ public class Program {
 		bib.getListaLivros().add(new Livro("301","Software Metrics: A Rigorous and Practical Approach", "CRC Press", "Norman Fenton,James Bieman", "3ª", "2014"));
 		bib.getListaLivros().add(new Livro("400", "Design Patterns: Elements of Reusable Object-Oriented Software","Addison-Wesley Professional","Erich Gamma,Richard Helm, Ralph Johnson, John Vlissides", "1ª", "1994"));
 		bib.getListaLivros().add(new Livro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language","Addison-Wesley Professional","Martin Fowler", "3ª", "2003"));
-		bib.getListaExemplares().add(new Exemplar("100", "01"));
-		bib.getListaExemplares().add(new Exemplar("100", "02"));
-		bib.getListaExemplares().add(new Exemplar("101", "03"));
-		bib.getListaExemplares().add(new Exemplar("200", "04"));
-		bib.getListaExemplares().add(new Exemplar("201", "05"));
-		bib.getListaExemplares().add(new Exemplar("300", "06"));
-		bib.getListaExemplares().add(new Exemplar("300", "07"));
-		bib.getListaExemplares().add(new Exemplar("400", "08"));
-		bib.getListaExemplares().add(new Exemplar("400", "09"));
+		bib.getListaExemplares().add(new Exemplar("100", "01", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("100", "02", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("101", "03", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("200", "04", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("201", "05", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("300", "06", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("300", "07", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("400", "08", "Disponível"));
+		bib.getListaExemplares().add(new Exemplar("400", "09", "Disponível"));
 		bib.commandRealizarEmprestimo("123", "400");
 		
 		

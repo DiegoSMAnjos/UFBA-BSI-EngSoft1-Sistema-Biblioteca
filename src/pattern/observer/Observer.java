@@ -1,4 +1,4 @@
-package observer;
+package pattern.observer;
 
 import model.entities.Livro;
 

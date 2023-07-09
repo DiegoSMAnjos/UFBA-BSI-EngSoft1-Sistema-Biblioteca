@@ -1,16 +1,18 @@
-package strategy;
+package pattern.strategy;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import facade_singleton.SistemaBiblioteca;
 import model.entities.Exemplar;
 import model.entities.Livro;
 import model.services.Emprestimo;
 import model.services.Reserva;
+import pattern.facade_singleton.SistemaBiblioteca;
 
 public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
-
+	// private int maxEmprestimosAbertos = Ilimitado;
+	private int tempoEmprestimo = 7;
+	
 	@Override
 	public void realizarEmprestimo(String codigoLivro, SistemaBiblioteca bib) {
 		if (this.verificaDevedor()) {

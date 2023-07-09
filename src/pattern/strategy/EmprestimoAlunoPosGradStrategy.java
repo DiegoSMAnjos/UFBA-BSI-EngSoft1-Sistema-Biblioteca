@@ -1,19 +1,20 @@
-package strategy;
+package pattern.strategy;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import facade_singleton.SistemaBiblioteca;
 import model.entities.Livro;
 import model.services.Emprestimo;
 import model.services.Reserva;
+import pattern.facade_singleton.SistemaBiblioteca;
 
 public class EmprestimoAlunoPosGradStrategy implements EmprestimoStrategy{
-	private int limiteEmprestimos = 4;
+	private int maxEmprestimosAbertos = 4;
+	private int tempoEmprestimo = 4;
 	
 	@Override
 	public void realizarEmprestimo(String codigoLivro, SistemaBiblioteca bib) {
-		if (emprestimosAtuais.size() >= limiteEmprestimos) {
+		if (emprestimosAtuais.size() >= maxEmprestimosAbertos) {
 			throw new Exception("Você não pode realizar mais emprestimos pois excedeu o limite!");
 		}
 		if (this.verificaDevedor()) {

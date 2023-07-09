@@ -3,22 +3,23 @@ package model.services;
 import java.time.LocalDate;
 
 import model.entities.Exemplar;
-import model.entities.IUsuario;
+import model.entities.Usuario;
 
 public class Reserva {
-	private IUsuario usuario;
+	private Usuario usuario;
 	private Exemplar exemplar;
 	private LocalDate data;
 	private boolean isAtiva;
 
-	public Reserva(IUsuario usuario, Exemplar exemplar) {
+	public Reserva(Usuario usuario, Exemplar exemplar) {
 		this.usuario = usuario;
 		this.exemplar = exemplar;
 		this.data = LocalDate.now();
+		exemplar.setStatus("Reservado");
 		this.isAtiva = true;
 	}
 
-	public IUsuario getUsuario() {
+	public Usuario getUsuario() {
 		return usuario;
 	}
 

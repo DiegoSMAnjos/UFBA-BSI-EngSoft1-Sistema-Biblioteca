@@ -3,11 +3,11 @@ package model.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import facade_singleton.SistemaBiblioteca;
 import model.services.Emprestimo;
 import model.services.Reserva;
-import observer.Observer;
-import observer.Subject;
+import pattern.facade_singleton.SistemaBiblioteca;
+import pattern.observer.Observer;
+import pattern.observer.Subject;
 
 public class Livro {
 	private String codigo;
@@ -74,15 +74,7 @@ public class Livro {
 		this.anoPublicacao = anoPublicacao;
 	}
 
-	/*
-	 * 
-	 * public void reservarItem(IUsuario usuario, Reserva reserva) {
-	 * this.reservaAtual = reserva; reserva.getExemplar().setStatus("Reservado"); if
-	 * (getLivrosReservadoCodigo(this).size() > LimiteReservasObserver) {
-	 * notifyObserver(this); }
-	 * 
-	 * }
-	 */
+	 
 	/*
 	 * 
 	 * private List<Livro> getLivrosReservadoCodigo(Livro livro) {
@@ -117,23 +109,25 @@ public class Livro {
 	 * return ((livro.getCodigoExemplar() == this.codigoExemplar) &&
 	 * (livro.getCodigoLivro().equals(this.codigo))); }
 	 */
-	/*
-	 * 
-	 * public String exibir() {
-	 * 
-	 * String reserva = ""; String emprestimo = ""; if (this.reservaAtual != null) {
-	 * reserva = ("\nReserva Atual:" + this.reservaAtual.getUsuario().getNome()); }
-	 * 
-	 * if (this.emprestimoAtual != null) { emprestimo =
-	 * ("\nEmprestimo Atual:  / Usuario: " +
-	 * this.emprestimoAtual.getUsuario().getNome() + "   / Data Emprestimo: " +
-	 * this.emprestimoAtual.getDataEmprestimo() + "   / Data Devolução: " +
-	 * this.emprestimoAtual.getDataDevolucaoPrevisao()); }
-	 * 
-	 * String exibicao =" \nCodigo Exemplar: " + this.codigoExemplar + "\nTitulo: "
-	 * + this.titulo + reserva + "\nStatus: " + this.status + emprestimo;
-	 * 
-	 * return exibicao; }
-	 */
+
+	public String exibir() {
+
+		String reserva = "";
+		String emprestimo = "";
+		if (this.reservaAtual != null) {
+			reserva = ("\nReserva Atual:" + this.reservaAtual.getUsuario().getNome());
+		}
+
+		if (this.emprestimoAtual != null) {
+			emprestimo = ("\nEmprestimo Atual:  / Usuario: " + this.emprestimoAtual.getUsuario().getNome()
+					+ "   / Data Emprestimo: " + this.emprestimoAtual.getDataEmprestimo() + "   / Data Devolução: "
+					+ this.emprestimoAtual.getDataDevolucaoPrevisao());
+		}
+
+		String exibicao = " \nCodigo Exemplar: " + this.codigoExemplar + "\nTitulo: " + this.titulo + reserva
+				+ "\nStatus: " + this.status + emprestimo;
+
+		return exibicao;
+	}
 
 }

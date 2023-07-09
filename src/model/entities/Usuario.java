@@ -1,15 +1,15 @@
 package model.entities;
 
-import strategy.*;
+import pattern.observer.Observer;
+import pattern.strategy.*;
 
-public class Usuario {
+public class Usuario implements Observer {
 	private String codigo;
 	private String tipoUsuario;
 	private String nome;
 	private EmprestimoStrategy emprestimoStrategy;
-	private ReservaStrategy reservaStrategy;
-	private DevolucaoStrategy devolucaoStrategy;
-	
+	private int quantidadeNotificacoes = 0;
+
 	public Usuario(String codigo, String tipoUsuario, String nome) {
 		super();
 		this.codigo = codigo;
@@ -17,16 +17,10 @@ public class Usuario {
 		this.nome = nome;
 		if (tipoUsuario == "Aluno de Graduação") {
 			this.emprestimoStrategy = new EmprestimoAlunoGradStrategy();
-			this.reservaStrategy = new ReservaAlunoGradStrategy();
-			this.devolucaoStrategy = new DevolucaoAlunoGradStrategy();
-		}else if (tipoUsuario == "Aluno de Pós-graduação") {
+		} else if (tipoUsuario == "Aluno de Pós-graduação") {
 			this.emprestimoStrategy = new EmprestimoAlunoPosGradStrategy();
-			this.reservaStrategy = new ReservaAlunoPosGradStrategy();
-			this.devolucaoStrategy = new DevolucaoAlunoPosGradStrategy();
-		}else if (tipoUsuario == "Professor") {
+		} else if (tipoUsuario == "Professor") {
 			this.emprestimoStrategy = new EmprestimoProfessorStrategy();
-			this.reservaStrategy = new ReservaProfessorStrategy();
-			this.devolucaoStrategy = new DevolucaoProfessorStrategy();
 		}
 	}
 
@@ -46,14 +40,6 @@ public class Usuario {
 		return emprestimoStrategy;
 	}
 
-	public ReservaStrategy getReservaStrategy() {
-		return reservaStrategy;
-	}
-
-	public DevolucaoStrategy getDevolucaoStrategy() {
-		return devolucaoStrategy;
-	}
-
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
@@ -70,13 +56,16 @@ public class Usuario {
 		this.emprestimoStrategy = emprestimoStrategy;
 	}
 
-	public void setReservaStrategy(ReservaStrategy reservaStrategy) {
-		this.reservaStrategy = reservaStrategy;
+	@Override
+	public void update(Livro livro) {
+		System.out.println("Existem mais de dois exemplares do livro: / Titulo: " + livro.getTitulo() + "/ Codigo: "
+				+ livro.getCodigo());
+		this.quantidadeNotificacoes++;
 	}
 
-	public void setDevolucaoStrategy(DevolucaoStrategy devolucaoStrategy) {
-		this.devolucaoStrategy = devolucaoStrategy;
+	@Override
+	public int getQuantidadeNotificacoes() {
+		return this.quantidadeNotificacoes;
 	}
-	
-	
+
 }
