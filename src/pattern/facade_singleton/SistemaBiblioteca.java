@@ -129,9 +129,7 @@ public class SistemaBiblioteca {
 			System.out.println("Não foi possível encontrar o usuário!");
 		}else {
 			List<Emprestimo> emprestimosAtuais = this.getEmprestimosAtuais(usuario);
-			for () {
-				
-			}
+			
 		}
 		/*
 		try {
@@ -193,14 +191,7 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
-
-		try {
-			getUsuarioByCodigo(codigoUsuario).getEmprestimoStrategy().realizarEmprestimo(codigoLivro, this, instanciaBiblioteca);;
-			System.out.println("Emprestimo Realizado!");
-		} catch (Exception e) {
-			System.out.println("Não foi possível realizar o seu emprestimo! " + e.getMessage());
-		}
-		
+		getUsuarioByCodigo(codigoUsuario).getEmprestimoStrategy().realizarEmprestimo(codigoUsuario, codigoLivro);
 	}
 
 	public void commandRealizarReserva(String codigoUsuario, String codigoLivro) {
@@ -275,7 +266,15 @@ public class SistemaBiblioteca {
 		return listaExemplaresLivro;
 
 	}
-
+	public List<Exemplar> getExemplaresByStatus(String codLivro, String status){
+		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
+		for (Exemplar exemplar : listaExemplares) {
+			if (exemplar.getCodigoLivro().equals(codLivro) && exemplar.getStatus().equals(status)) {
+				listaExemplaresLivro.add(exemplar);
+			}
+		}
+		return listaExemplaresLivro;
+	}
 
 
 	public List<Emprestimo> getEmprestimosAtuais(Usuario usuario) {
@@ -315,7 +314,6 @@ public class SistemaBiblioteca {
 	}
 
 	public boolean verificaDevedor(Usuario usuario) {
-
 		return this.getEmprestimosAtuais(usuario).stream()
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}

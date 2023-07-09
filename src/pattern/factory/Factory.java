@@ -4,8 +4,7 @@ import model.entities.Exemplar;
 import model.entities.Livro;
 import model.entities.Usuario;
 import pattern.facade_singleton.SistemaBiblioteca;
-import pattern.strategy.EmprestimoAlunoGradStrategy;
-import pattern.strategy.EmprestimoAlunoPosGradStrategy;
+import pattern.strategy.EmprestimoAlunoStrategy;
 import pattern.strategy.EmprestimoProfessorStrategy;
 
 public class Factory {
@@ -13,10 +12,8 @@ public class Factory {
 	
 	public static void createUsuario(String codigo, String tipoUsuario, String nome) {
 		Usuario usuario = new Usuario(codigo, tipoUsuario, nome);
-		if (tipoUsuario.equals("Aluno de Graduação")) {
-			usuario.setEmprestimoStrategy(new EmprestimoAlunoGradStrategy());
-		} else if (tipoUsuario.equals("Aluno de Pós-graduação")) {
-			usuario.setEmprestimoStrategy(new EmprestimoAlunoPosGradStrategy());
+		if (tipoUsuario.equals("Aluno de Graduação") || tipoUsuario.equals("Aluno de Pós-graduação")) {
+			usuario.setEmprestimoStrategy(new EmprestimoAlunoStrategy());
 		} else if (tipoUsuario.equals("Professor")) {
 			usuario.setEmprestimoStrategy(new EmprestimoProfessorStrategy());
 		}else {
