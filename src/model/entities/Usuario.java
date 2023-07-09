@@ -1,14 +1,13 @@
 package model.entities;
 
-import pattern.observer.Observer;
 import pattern.strategy.EmprestimoStrategy;
 
-public class Usuario implements Observer {
-	private String codigo;
-	private String tipoUsuario;
-	private String nome;
-	private EmprestimoStrategy emprestimoStrategy;
-	private int quantidadeNotificacoes = 0;
+public abstract class Usuario  {
+	protected String codigo;
+	protected String tipoUsuario;
+	protected String nome;
+	protected EmprestimoStrategy emprestimoStrategy;
+
 
 	public Usuario(String codigo, String tipoUsuario, String nome) {
 		this.codigo = codigo;
@@ -46,18 +45,6 @@ public class Usuario implements Observer {
 
 	public void setEmprestimoStrategy(EmprestimoStrategy emprestimoStrategy) {
 		this.emprestimoStrategy = emprestimoStrategy;
-	}
-
-	@Override
-	public void update(Livro livro) {
-		System.out.println("Existem mais de dois exemplares do livro: / Titulo: " + livro.getTitulo() + "/ Codigo: "
-				+ livro.getCodigo());
-		this.quantidadeNotificacoes++;
-	}
-
-	@Override
-	public int getQuantidadeNotificacoes() {
-		return this.quantidadeNotificacoes;
 	}
 
 }

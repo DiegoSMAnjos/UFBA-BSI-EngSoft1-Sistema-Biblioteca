@@ -12,7 +12,7 @@ public class Program {
 		Factory.createUsuarios();
 		Factory.createLivros();
 		Factory.createExemplares();
-		Factory.createEmprestimos();
+		// Factory.createEmprestimos();
 
 		System.out.println("Seja Bem-vindo ao Sistema de Biblioteca!\n\nInsira um comando: ");
 		try (Scanner sc = new Scanner(System.in)) {

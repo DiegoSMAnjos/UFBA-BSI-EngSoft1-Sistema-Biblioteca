@@ -1,12 +1,20 @@
 package model.entities;
 
-public class Livro {
+import java.util.ArrayList;
+import java.util.List;
+
+import pattern.observer.Observer;
+import pattern.observer.Subject;
+
+public class Livro implements Subject {
 	private String codigo;
 	private String titulo;
 	private String editora;
 	private String autor;
 	private String edicao;
 	private String anoPublicacao;
+	private List<Observer> observadores;
+	private int reservasSimultaneas = 0;
 
 	public Livro(String codigo, String titulo, String editora, String autor, String edicao, String anopublicacao) {
 		this.codigo = codigo;
@@ -15,6 +23,7 @@ public class Livro {
 		this.autor = autor;
 		this.edicao = edicao;
 		this.anoPublicacao = anopublicacao;
+		this.observadores = new ArrayList<>();
 	}
 
 	public String getCodigo() {
@@ -40,6 +49,14 @@ public class Livro {
 	public String getAnoPublicacao() {
 		return anoPublicacao;
 	}
+	
+	public List<Observer> getObservadores() {
+		return observadores;
+	}
+
+	public int getReservasSimultaneas() {
+		return reservasSimultaneas;
+	}
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
@@ -64,5 +81,38 @@ public class Livro {
 	public void setAnoPublicacao(String anoPublicacao) {
 		this.anoPublicacao = anoPublicacao;
 	}
+	
+	public void addReservasSimultaneas() {
+		this.reservasSimultaneas++;
+	}
+	
+	public void removeReservasSimultaneas() {
+		this.reservasSimultaneas--;
+	}
+	
+    public void verificarReservasSimultaneas() {
+        if (reservasSimultaneas > 2) {
+        	notifyObserver();
+        }
+    }
+
+	@Override
+	public void addObserver(Observer observador) {
+		observadores.add(observador);
+	}
+
+	@Override
+	public void removeObserver(Observer observador) {
+		observadores.remove(observador);
+	}
+
+	@Override
+	public void notifyObserver() {
+		for (Observer observador : observadores) {
+            observador.update();
+        }
+		
+	}
+
 
 }

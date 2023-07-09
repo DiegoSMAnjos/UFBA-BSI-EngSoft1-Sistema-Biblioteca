@@ -3,39 +3,41 @@ package pattern.factory;
 import model.entities.Exemplar;
 import model.entities.Livro;
 import model.entities.Usuario;
+import model.entities.UsuarioAlunoGrad;
+import model.entities.UsuarioAlunoPosGrad;
+import model.entities.UsuarioProfessor;
 import pattern.facade_singleton.SistemaBiblioteca;
-import pattern.strategy.EmprestimoAlunoStrategy;
-import pattern.strategy.EmprestimoProfessorStrategy;
 
 public class Factory {
-	static SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
-	
+
 	public static void createUsuario(String codigo, String tipoUsuario, String nome) {
-		Usuario usuario = new Usuario(codigo, tipoUsuario, nome);
-		if (tipoUsuario.equals("Aluno de Graduação") || tipoUsuario.equals("Aluno de Pós-graduação")) {
-			usuario.setEmprestimoStrategy(new EmprestimoAlunoStrategy());
+		Usuario usuario;
+		if (tipoUsuario.equals("Aluno de Graduação")) {
+			usuario = new UsuarioAlunoGrad(codigo, tipoUsuario, nome);
+		} else if (tipoUsuario.equals("Aluno de Pós-graduação")) {
+			usuario = new UsuarioAlunoPosGrad(codigo, tipoUsuario, nome);
 		} else if (tipoUsuario.equals("Professor")) {
-			usuario.setEmprestimoStrategy(new EmprestimoProfessorStrategy());
-		}else {
+			usuario = new UsuarioProfessor(codigo, tipoUsuario, nome);
+		} else {
 			System.out.println("O tipo de usuário inserido é inválido!");
 			return;
 		}
-		bib.getListaUsuarios().add(usuario);
+		SistemaBiblioteca.getInstance().getListaUsuarios().add(usuario);
 	}
-	
-	public static void createLivro() {
-		
+
+	public static void createLivro(String codigo, String titulo, String editora, String autor, String edicao,
+			String anopublicacao) {
+		SistemaBiblioteca.getInstance().getListaLivros()
+				.add(new Livro(codigo, titulo, editora, autor, edicao, anopublicacao));
 	}
-	
+
 	public static void createExemplar(String codigoLivro, String codigoExemplar, String status) {
 		if (SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro).equals(null)) {
 			System.out.println("o livro de código " + codigoLivro + " não existe no sistema!");
 		} else {
-			bib.getListaExemplares().add(new Exemplar(codigoLivro, codigoExemplar, status));
+			SistemaBiblioteca.getInstance().getListaExemplares().add(new Exemplar(codigoLivro, codigoExemplar, status));
 		}
 	}
-	
-	
 
 	public static void createUsuarios() {
 		createUsuario("123", "Aluno de Graduação", "João da Silva");
@@ -45,16 +47,23 @@ public class Factory {
 	}
 
 	public static void createLivros() {
-		bib.getListaLivros().add(new Livro("100", "Engenharia de Software", "AddisonWesley",  "Ian Sommervile", "6ª", "2000"));
-		bib.getListaLivros().add(new Livro("101", "UML - Guia do Usuário", "Campus", "Grady Booch, James Rumbaugh, Ivar Jacobson", "7ª", "2000"));
-		bib.getListaLivros().add(new Livro("200", "Code Complete", "Microsoft Press", "Steve McConnell", "2ª", "2014"));
-		bib.getListaLivros().add(new Livro("201", "Agile Software, Development,Principles, Patterns,and Practices", "Prentice Hall", "Robert Martin", "1ª", "2002"));
-		bib.getListaLivros().add(new Livro("300", "Refactoring: Improving the Design of Existing Code","Addison-Wesley Professional", "Martin Fowler", "1ª", "1999"));
-		bib.getListaLivros().add(new Livro("301","Software Metrics: A Rigorous and Practical Approach", "CRC Press", "Norman Fenton,James Bieman", "3ª", "2014"));
-		bib.getListaLivros().add(new Livro("400", "Design Patterns: Elements of Reusable Object-Oriented Software","Addison-Wesley Professional","Erich Gamma,Richard Helm, Ralph Johnson, John Vlissides", "1ª", "1994"));
-		bib.getListaLivros().add(new Livro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language","Addison-Wesley Professional","Martin Fowler", "3ª", "2003"));
-		
+		createLivro("100", "Engenharia de Software", "AddisonWesley", "Ian Sommervile", "6ª", "2000");
+		createLivro("101", "UML - Guia do Usuário", "Campus", "Grady Booch, James Rumbaugh, Ivar Jacobson", "7ª",
+				"2000");
+		createLivro("200", "Code Complete", "Microsoft Press", "Steve McConnell", "2ª", "2014");
+		createLivro("201", "Agile Software, Development,Principles, Patterns,and Practices", "Prentice Hall",
+				"Robert Martin", "1ª", "2002");
+		createLivro("300", "Refactoring: Improving the Design of Existing Code", "Addison-Wesley Professional",
+				"Martin Fowler", "1ª", "1999");
+		createLivro("301", "Software Metrics: A Rigorous and Practical Approach", "CRC Press",
+				"Norman Fenton,James Bieman", "3ª", "2014");
+		createLivro("400", "Design Patterns: Elements of Reusable Object-Oriented Software",
+				"Addison-Wesley Professional", "Erich Gamma,Richard Helm, Ralph Johnson, John Vlissides", "1ª", "1994");
+		createLivro("401", "UML Distilled: A Brief Guide to the Standard Object Modeling Language",
+				"Addison-Wesley Professional", "Martin Fowler", "3ª", "2003");
+
 	}
+
 	public static void createExemplares() {
 		createExemplar("100", "01", "Disponível");
 		createExemplar("100", "02", "Disponível");
@@ -68,8 +77,8 @@ public class Factory {
 	}
 
 	public static void createEmprestimos() {
-		bib.commandRealizarEmprestimo("123", "400");
-		
+		SistemaBiblioteca.getInstance().commandRealizarEmprestimo("123", "400");
+
 	}
-	
+
 }
