@@ -1,10 +1,12 @@
 package strategy;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import facade_singleton.SistemaBiblioteca;
 import model.entities.Exemplar;
 import model.entities.Livro;
+import model.services.Emprestimo;
 import model.services.Reserva;
 
 public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
@@ -42,4 +44,9 @@ public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
 		
 	}
 
+	private void adicionarEmprestimo(Exemplar exemplar) {
+		Emprestimo emprestimo = new Emprestimo(this, exemplar, LocalDate.now(), LocalDate.now().plusDays(devolucao));
+		exemplar.emprestarItem(this, emprestimo);
+		emprestimosAtuais.add(emprestimo);
+	}
 }

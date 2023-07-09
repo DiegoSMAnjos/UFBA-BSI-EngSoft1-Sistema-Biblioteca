@@ -41,5 +41,21 @@ public class ReservaAlunoPosGradStrategy implements ReservaStrategy {
 		historicoReservas.add(reserva);
 		
 	}
+	
+	private void adicionarReserva(Livro exemplar) {
+		Reserva reserva = new Reserva(this, exemplar);
+		exemplar.reservarItem(this, reserva);
+		this.reservasAtuais.add(reserva);
+	}
+	
+	private Reserva obterReserva(String codigoLivro) {
+
+		List<Reserva> reservas = reservasAtuais.stream()
+				.filter(reserva -> reserva.getLivro().getCodigoLivro().equals(codigoLivro)).toList();
+		if (reservas.size() > 0) {
+			return reservas.get(0);
+		}
+		return null;
+	}
 
 }

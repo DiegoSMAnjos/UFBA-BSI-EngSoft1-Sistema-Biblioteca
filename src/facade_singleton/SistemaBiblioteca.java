@@ -256,7 +256,7 @@ public class SistemaBiblioteca {
 
 	}
 
-	public boolean verificaDevedor(IUsuario usuario) {
+	public boolean verificaDevedor(Usuario usuario) {
 
 		return this.getEmprestimosAtuais(usuario).stream()
 				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
