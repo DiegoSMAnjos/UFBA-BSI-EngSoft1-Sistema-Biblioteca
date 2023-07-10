@@ -8,10 +8,9 @@ import model.services.Reserva;
 import pattern.facade_singleton.SistemaBiblioteca;
 
 public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
-	private int tempoEmprestimo = 7;
-	
 	@Override
 	public void realizarEmprestimo(String codUsuario, String codigoLivro) {
+		int tempoEmprestimo = 7;
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
 		Usuario usuario = bib.getUsuarioByCodigo(codUsuario);
 		

@@ -8,11 +8,12 @@ import model.services.Reserva;
 import pattern.facade_singleton.SistemaBiblioteca;
 
 public class EmprestimoAlunoStrategy implements EmprestimoStrategy{
-	private int maxEmprestimosAbertos;
-	private int tempoEmprestimo;
+
 	
 	@Override
 	public void realizarEmprestimo(String codUsuario, String codigoLivro) {
+		int maxEmprestimosAbertos = 0;
+		int tempoEmprestimo = 0;
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
 		Usuario usuario = bib.getUsuarioByCodigo(codUsuario);
 		if (usuario.getTipoUsuario().equals("Aluno de Graduação")) {
