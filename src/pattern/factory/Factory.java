@@ -74,6 +74,7 @@ public class Factory {
 		createExemplar("300", "07", "Disponível");
 		createExemplar("400", "08", "Disponível");
 		createExemplar("400", "09", "Disponível");
+		createExemplar("400", "10", "Disponível");
 	}
 
 	public static void createEmprestimos() {

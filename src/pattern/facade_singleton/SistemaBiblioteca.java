@@ -57,11 +57,11 @@ public class SistemaBiblioteca {
 	}
 
 	public List<Usuario> getListaUsuarios() {
-		return this.listaUsuarios;
+		return listaUsuarios;
 	}
 
 	public List<Livro> getListaLivros() {
-		return this.listaLivros;
+		return listaLivros;
 	}
 
 	public List<Exemplar> getListaExemplares() {
@@ -205,7 +205,7 @@ public class SistemaBiblioteca {
 		System.out.println("Usuário: " + getUsuarioByCodigo(codigoUsuario).getNome());
 		System.out.println("Livro: " + getLivroByCodigo(codigoLivro).getTitulo());
 		getLivroByCodigo(codigoLivro).addReservasSimultaneas();
-		getLivroByCodigo(codigoLivro).notifyObserver();
+		getLivroByCodigo(codigoLivro).verificarReservasSimultaneas();
 		return;
 	}
 
@@ -224,7 +224,7 @@ public class SistemaBiblioteca {
 	}
 
 	public Livro getLivroByCodigo(String codigoLivro) {
-		for (Livro livro : listaLivros)
+		for (Livro livro : getListaLivros())
 			if (livro.getCodigo().equals(codigoLivro)) {
 				return livro;
 			}
@@ -233,7 +233,7 @@ public class SistemaBiblioteca {
 
 	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
 		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
-		for (Exemplar exemplar : listaExemplares) {
+		for (Exemplar exemplar : getListaExemplares()) {
 			if (exemplar.getCodigoLivro().equals(codLivro)) {
 				listaExemplaresLivro.add(exemplar);
 			}
