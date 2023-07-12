@@ -6,7 +6,7 @@ import pattern.strategy.EmprestimoProfessorStrategy;
 public class UsuarioProfessor extends Usuario implements Observer{
 	
 	private int qtdNotificacoes = 0;
-	
+
 	
 	public UsuarioProfessor(String codigo, String tipoUsuario, String nome) {
 		super(codigo, tipoUsuario, nome);

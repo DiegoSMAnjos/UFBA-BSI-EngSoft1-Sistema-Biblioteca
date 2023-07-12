@@ -26,16 +26,12 @@ public class SistemaBiblioteca {
 	public static SistemaBiblioteca instanciaBiblioteca;
 	private List<Usuario> listaUsuarios;
 	private List<Livro> listaLivros;
-	private List<Reserva> listaReservas;
-	private List<Emprestimo> listaEmprestimos;
 
 	private Map<String, Command> commands;
 
 	private SistemaBiblioteca() {
 		this.listaUsuarios = new ArrayList<Usuario>();
 		this.listaLivros = new ArrayList<Livro>();
-		this.listaReservas = new ArrayList<Reserva>();
-		this.listaEmprestimos = new ArrayList<Emprestimo>();
 		this.commands = new HashMap<>();
 		this.getCommands().put("dev", new CommandRealizarDevolucao());
 		this.getCommands().put("res", new CommandRealizarReserva());
@@ -62,14 +58,6 @@ public class SistemaBiblioteca {
 		return listaLivros;
 	}
 
-	public List<Reserva> getListaReservas() {
-		return listaReservas;
-	}
-
-	public List<Emprestimo> getListaEmprestimos() {
-		return listaEmprestimos;
-	}
-
 	public Map<String, Command> getCommands() {
 		return commands;
 	}
@@ -82,10 +70,10 @@ public class SistemaBiblioteca {
 		if (getUsuarioByCodigo(codigoUsuario).getTipoUsuario().equals("Professor")) {
 			getLivroByCodigo(codigoLivro).getObservadores().add((Observer) getUsuarioByCodigo(codigoUsuario));
 			System.out.println("Observador registrado com sucesso!");
-		}else {
+		} else {
 			System.out.println("Insira um usuário válido!");
 		}
-		
+
 	}
 
 	public void commandConsultarLivro(String codigoLivro) {
@@ -119,6 +107,8 @@ public class SistemaBiblioteca {
 		if (getUsuarioByCodigo(codigoUsuario).getTipoUsuario().equals("Professor")) {
 			Observer observer = (Observer) getUsuarioByCodigo(codigoUsuario);
 			System.out.println("Quantidade de Notificações: " + observer.getQtdNotificacoes());
+		} else {
+			System.out.println("Insira um observador válido!");
 		}
 	}
 
@@ -130,34 +120,31 @@ public class SistemaBiblioteca {
 		} else {
 			System.out.println("Usuário: " + usuario.getNome());
 			System.out.println("Empréstimos: ");
-			for (Emprestimo emprestimo : getListaEmprestimos()) {
-				if (emprestimo.getUsuario().equals(usuario)) {
-					System.out.println("-------------------");
-					System.out.println(
-							"Livro: " + getLivroByCodigo(emprestimo.getExemplar().getCodigoLivro()).getTitulo());
-					System.out.println("Data do Empréstimo: " + emprestimo.getDataEmprestimo());
-					if (emprestimo.getIsAtivo() == true) {
-						System.out.println("Status: em curso");
-						System.out.println("Data Prevista de Devolução: " + emprestimo.getDataDevolucaoPrevisao());
-					} else {
-						System.out.println("Status: finalizado");
-						System.out.println("Data de Devolução: " + emprestimo.getDataDevolucaoReal());
-					}
+			for (Emprestimo emprestimo : usuario.getListaEmprestimos()) {
+				System.out.println("-------------------");
+				System.out.println("Livro: " + getLivroByCodigo(emprestimo.getExemplar().getCodigoLivro()).getTitulo());
+				System.out.println("Data do Empréstimo: " + emprestimo.getDataEmprestimo());
+				if (emprestimo.getIsAtivo() == true) {
+					System.out.println("Status: em curso");
+					System.out.println("Data Prevista de Devolução: " + emprestimo.getDataDevolucaoPrevisao());
+				} else {
+					System.out.println("Status: finalizado");
+					System.out.println("Data de Devolução: " + emprestimo.getDataDevolucaoReal());
 				}
+
 			}
 			System.out.println("-------------------");
 			System.out.println("Reservas: ");
-			for (Reserva reserva : getReservasAtuaisByUsuario(usuario)) {
-					System.out.println("-------------------");
-					System.out.println("Livro: " + getLivroByCodigo(reserva.getExemplar().getCodigoLivro()).getTitulo());
-					System.out.println("Data da Reserva: " + reserva.getData());
+			for (Reserva reserva : usuario.getListaReservas()) {
+				System.out.println("-------------------");
+				System.out.println("Livro: " + getLivroByCodigo(reserva.getExemplar().getCodigoLivro()).getTitulo());
+				System.out.println("Data da Reserva: " + reserva.getData());
 			}
 		}
 	}
 
 	public void commandRealizarDevolucao(String codigoUsuario, String codigoLivro) {
-		List<Emprestimo> emprestimosAtivosByUsuario = getEmprestimosAtuais(getUsuarioByCodigo(codigoUsuario));
-		for (Emprestimo emp : emprestimosAtivosByUsuario) {
+		for (Emprestimo emp : getEmprestimosAtuaisByUsuario(getUsuarioByCodigo(codigoUsuario))) {
 			if (emp.getExemplar().getCodigoLivro().equals(codigoLivro)) {
 				emp.setDataDevolucaoReal(LocalDate.now());
 				emp.setIsAtivo(false);
@@ -167,10 +154,9 @@ public class SistemaBiblioteca {
 				System.out.println("Livro: " + getLivroByCodigo(codigoLivro).getTitulo());
 				return;
 			}
-			System.out.println("O usuário não possui empréstimos em aberto para esse livro");
-			return;
 		}
-
+		System.out.println("O usuário não possui empréstimos em aberto para esse livro");
+		return;
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
@@ -193,14 +179,24 @@ public class SistemaBiblioteca {
 				return;
 			}
 		}
-		Exemplar exemplar = getExemplaresByStatus(codigoLivro, "Disponível").get(0);
-		getListaReservas().add(new Reserva(usuario, exemplar));
-		System.out.println("Reserva realizada!");
-		System.out.println("Usuário: " + getUsuarioByCodigo(codigoUsuario).getNome());
-		System.out.println("Livro: " + getLivroByCodigo(codigoLivro).getTitulo());
-		getLivroByCodigo(codigoLivro).addReservasSimultaneas();
-		getLivroByCodigo(codigoLivro).verificarReservasSimultaneas();
-		return;
+		Exemplar exemplar = getLivroByCodigo(codigoLivro).getListaExemplares().stream()
+                .filter(x -> x.getStatus().equals("Disponível"))
+                .findFirst()
+                .orElse(null);
+		if (exemplar != null) {
+			usuario.getListaReservas().add(new Reserva(usuario, exemplar));
+			System.out.println("Reserva realizada!");
+			System.out.println("Usuário: " + usuario.getNome());
+			System.out.println("Livro: " + getLivroByCodigo(codigoLivro).getTitulo());
+			getLivroByCodigo(codigoLivro).addReservasSimultaneas();
+			getLivroByCodigo(codigoLivro).verificarReservasSimultaneas();
+			return;
+		}
+		else {
+			System.out.println("Não há exemplares disponíveis.");
+			System.out.println("Reserva não realizada.");
+		}
+		
 	}
 
 	public void commandSair() {
@@ -225,32 +221,31 @@ public class SistemaBiblioteca {
 		return null;
 	}
 
-
 	public List<Exemplar> getExemplaresByStatus(String codLivro, String status) {
 		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
 		for (Exemplar exemplar : getLivroByCodigo(codLivro).getListaExemplares()) {
-			if (exemplar.getCodigoLivro().equals(codLivro) && exemplar.getStatus().equals(status)) {
+			if (exemplar.getStatus().equals(status)) {
 				listaExemplaresLivro.add(exemplar);
 			}
 		}
 		return listaExemplaresLivro;
 	}
 
-	public List<Emprestimo> getEmprestimosAtuais(Usuario usuario) {
+	public List<Emprestimo> getEmprestimosAtuaisByUsuario(Usuario usuario) {
 		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
 
-			for (Emprestimo emp : getListaEmprestimos()) {
-				if (emp.getUsuario().getCodigo().equals(usuario.getCodigo()) && emp.getIsAtivo() == true) {
-					emprestimosAtuais.add(emp);
-				}
+		for (Emprestimo emp : usuario.getListaEmprestimos()) {
+			if (emp.getIsAtivo() == true) {
+				emprestimosAtuais.add(emp);
+			}
 		}
 		return emprestimosAtuais;
 	}
 
 	public List<Reserva> getReservasAtuaisByUsuario(Usuario usuario) {
 		List<Reserva> reservasAtuais = new ArrayList<>();
-		for (Reserva res : getListaReservas()) {
-			if (res.getUsuario().getCodigo().equals(usuario.getCodigo()) && res.getIsAtiva() == true) {
+		for (Reserva res : usuario.getListaReservas()) {
+			if (res.getIsAtiva() == true) {
 				reservasAtuais.add(res);
 			}
 		}
@@ -259,27 +254,34 @@ public class SistemaBiblioteca {
 
 	public List<Reserva> getReservasAtuaisByLivro(String codigoLivro) {
 		List<Reserva> reservasAtuais = new ArrayList<>();
-		for (Reserva res : getListaReservas()) {
-			if (res.getExemplar().getCodigoLivro().equals(codigoLivro) && res.getIsAtiva() == true) {
-				reservasAtuais.add(res);
+		for (Usuario usuario : getListaUsuarios()) {
+			for (Reserva res : usuario.getListaReservas()) {
+				if (res.getExemplar().getCodigoLivro().equals(codigoLivro) && res.getIsAtiva() == true) {
+					reservasAtuais.add(res);
+				}
 			}
-		}
+		}	
 		return reservasAtuais;
 	}
 
 	public Reserva getReservaAtivaByExemplar(String codigoExemplar) {
-		for (Reserva reserva : getListaReservas()) {
-			if (reserva.getIsAtiva() == true && reserva.getExemplar().getCodigo().equals(codigoExemplar)) {
-				return reserva;
+		for (Usuario usuario : getListaUsuarios()) {
+			for (Reserva reserva : usuario.getListaReservas()) {
+				if (reserva.getIsAtiva() == true && reserva.getExemplar().getCodigo().equals(codigoExemplar)) {
+					return reserva;
+				}
 			}
+
 		}
 		return null;
 	}
 
 	public Emprestimo getEmprestimoAtivoByExemplar(String codigoExemplar) {
-		for (Emprestimo emprestimo : getListaEmprestimos()) {
-			if (emprestimo.getIsAtivo() == true && emprestimo.getExemplar().getCodigo().equals(codigoExemplar)) {
-				return emprestimo;
+		for (Usuario usuario : getListaUsuarios()) {
+			for (Emprestimo emprestimo : usuario.getListaEmprestimos()) {
+				if (emprestimo.getIsAtivo() == true && emprestimo.getExemplar().getCodigo().equals(codigoExemplar)) {
+					return emprestimo;
+				}
 			}
 		}
 		return null;
@@ -294,11 +296,6 @@ public class SistemaBiblioteca {
 		}
 		return exemplaresDisponiveis;
 
-	}
-
-	public boolean verificaDevedor(Usuario usuario) {
-		return this.getEmprestimosAtuais(usuario).stream()
-				.anyMatch(emprestimo -> emprestimo.getDataDevolucaoPrevisao().isBefore(LocalDate.now()));
 	}
 
 }

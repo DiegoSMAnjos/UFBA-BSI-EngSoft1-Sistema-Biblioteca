@@ -1,7 +1,9 @@
 package model.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pattern.observer.Observer;
 import pattern.observer.Subject;
@@ -14,7 +16,7 @@ public class Livro implements Subject {
 	private String edicao;
 	private String anoPublicacao;
 	private List<Exemplar> listaExemplares;
-	private List<Observer> observadores;
+	private Set<Observer> observadores;
 	private int reservasSimultaneas = 0;
 
 	public Livro(String codigo, String titulo, String editora, String autor, String edicao, String anopublicacao) {
@@ -25,7 +27,7 @@ public class Livro implements Subject {
 		this.edicao = edicao;
 		this.anoPublicacao = anopublicacao;
 		this.listaExemplares = new ArrayList<>();
-		this.observadores = new ArrayList<>();
+		this.observadores = new HashSet<>();
 	}
 
 	public String getCodigo() {
@@ -56,7 +58,7 @@ public class Livro implements Subject {
 		return listaExemplares;
 	}
 	
-	public List<Observer> getObservadores() {
+	public Set<Observer> getObservadores() {
 		return observadores;
 	}
 

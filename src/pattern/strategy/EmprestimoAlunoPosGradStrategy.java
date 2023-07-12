@@ -32,15 +32,15 @@ public class EmprestimoAlunoPosGradStrategy implements EmprestimoStrategy{
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
 		Usuario usuario = bib.getUsuarioByCodigo(codUsuario);
 		
-		if (bib.getEmprestimosAtuais(usuario).size() >= getMaxEmprestimosAbertos()) {
+		if (bib.getEmprestimosAtuaisByUsuario(usuario).size() >= getMaxEmprestimosAbertos()) {
 			System.out.println("Você não pode realizar mais empréstimos pois excedeu o limite!");
 			return;
 		}
-		if (bib.verificaDevedor(usuario)) {
+		if (usuario.verificaDevedor()) {
 			System.out.println("O usuário está com status devedor!");
 			return;
 		}
-		for (Emprestimo emp : bib.getEmprestimosAtuais(usuario)) {
+		for (Emprestimo emp : bib.getEmprestimosAtuaisByUsuario(usuario)) {
 			if(emp.getExemplar().getCodigoLivro().equals(codigoLivro)) {
 				System.out.println("O usuário já pegou este livro emprestado!");
 				return;
@@ -51,7 +51,7 @@ public class EmprestimoAlunoPosGradStrategy implements EmprestimoStrategy{
 				reserva.getExemplar().setStatus("Emprestado");
 				reserva.setIsAtiva(false);
 				bib.getLivroByCodigo(reserva.getExemplar().getCodigoLivro()).removeReservasSimultaneas();;
-				bib.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(getTempoEmprestimo())));
+				usuario.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(getTempoEmprestimo())));
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
 				System.out.println("Livro: " + bib.getLivroByCodigo(codigoLivro).getTitulo());
@@ -60,7 +60,7 @@ public class EmprestimoAlunoPosGradStrategy implements EmprestimoStrategy{
 		}
 		for (Exemplar exemplar : bib.getLivroByCodigo(codigoLivro).getListaExemplares()) {
 			if (exemplar.getStatus().equals("Disponível")) {
-				bib.getListaEmprestimos().add(new Emprestimo(usuario, exemplar, LocalDate.now(), LocalDate.now().plusDays(getTempoEmprestimo())));
+				usuario.getListaEmprestimos().add(new Emprestimo(usuario, exemplar, LocalDate.now(), LocalDate.now().plusDays(getTempoEmprestimo())));
 				exemplar.setStatus("Emprestado");
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
