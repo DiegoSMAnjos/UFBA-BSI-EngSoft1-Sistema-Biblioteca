@@ -14,15 +14,10 @@ public class Factory {
 		Usuario usuario;
 		if (tipoUsuario.equals("Aluno de Graduação")) {
 			usuario = new UsuarioAlunoGrad(codigo, tipoUsuario, nome);
-			usuario.setMaxEmprestimosAbertos(3);
-			usuario.setTempoEmprestimo(3);
 		} else if (tipoUsuario.equals("Aluno de Pós-graduação")) {
 			usuario = new UsuarioAlunoPosGrad(codigo, tipoUsuario, nome);
-			usuario.setMaxEmprestimosAbertos(4);
-			usuario.setTempoEmprestimo(4);
 		} else if (tipoUsuario.equals("Professor")) {
 			usuario = new UsuarioProfessor(codigo, tipoUsuario, nome);
-			usuario.setTempoEmprestimo(7);
 		} else {
 			System.out.println("O tipo de usuário inserido é inválido!");
 			return;
@@ -40,7 +35,7 @@ public class Factory {
 		if (SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro).equals(null)) {
 			System.out.println("o livro de código " + codigoLivro + " não existe no sistema!");
 		} else {
-			SistemaBiblioteca.getInstance().getListaExemplares().add(new Exemplar(codigoLivro, codigoExemplar, status));
+			SistemaBiblioteca.getInstance().getLivroByCodigo(codigoLivro).getListaExemplares().add(new Exemplar(codigoLivro, codigoExemplar, status));
 		}
 	}
 

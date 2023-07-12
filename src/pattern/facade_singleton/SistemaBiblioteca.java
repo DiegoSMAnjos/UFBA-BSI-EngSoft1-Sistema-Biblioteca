@@ -26,7 +26,6 @@ public class SistemaBiblioteca {
 	public static SistemaBiblioteca instanciaBiblioteca;
 	private List<Usuario> listaUsuarios;
 	private List<Livro> listaLivros;
-	private List<Exemplar> listaExemplares;
 	private List<Reserva> listaReservas;
 	private List<Emprestimo> listaEmprestimos;
 
@@ -35,7 +34,6 @@ public class SistemaBiblioteca {
 	private SistemaBiblioteca() {
 		this.listaUsuarios = new ArrayList<Usuario>();
 		this.listaLivros = new ArrayList<Livro>();
-		this.listaExemplares = new ArrayList<Exemplar>();
 		this.listaReservas = new ArrayList<Reserva>();
 		this.listaEmprestimos = new ArrayList<Emprestimo>();
 		this.commands = new HashMap<>();
@@ -62,10 +60,6 @@ public class SistemaBiblioteca {
 
 	public List<Livro> getListaLivros() {
 		return listaLivros;
-	}
-
-	public List<Exemplar> getListaExemplares() {
-		return listaExemplares;
 	}
 
 	public List<Reserva> getListaReservas() {
@@ -95,7 +89,7 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandConsultarLivro(String codigoLivro) {
-		List<Exemplar> exemplares = getExemplaresByCodLivro(codigoLivro);
+		List<Exemplar> exemplares = getLivroByCodigo(codigoLivro).getListaExemplares();
 		if (exemplares == null) {
 			System.out.println("Não foi possível encontrar o livro!");
 			return;
@@ -129,7 +123,7 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandConsultarUsuario(String codigoUsuario) {
-		Usuario usuario = this.getUsuarioByCodigo(codigoUsuario);
+		Usuario usuario = getUsuarioByCodigo(codigoUsuario);
 		if (usuario.equals(null)) {
 			System.out.println("Não foi possível encontrar o usuário!");
 			return;
@@ -231,19 +225,10 @@ public class SistemaBiblioteca {
 		return null;
 	}
 
-	public List<Exemplar> getExemplaresByCodLivro(String codLivro) {
-		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
-		for (Exemplar exemplar : getListaExemplares()) {
-			if (exemplar.getCodigoLivro().equals(codLivro)) {
-				listaExemplaresLivro.add(exemplar);
-			}
-		}
-		return listaExemplaresLivro;
-	}
 
 	public List<Exemplar> getExemplaresByStatus(String codLivro, String status) {
 		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
-		for (Exemplar exemplar : getListaExemplares()) {
+		for (Exemplar exemplar : getLivroByCodigo(codLivro).getListaExemplares()) {
 			if (exemplar.getCodigoLivro().equals(codLivro) && exemplar.getStatus().equals(status)) {
 				listaExemplaresLivro.add(exemplar);
 			}
@@ -302,7 +287,7 @@ public class SistemaBiblioteca {
 
 	public List<Exemplar> getExemplaresDisponiveis(String codigoLivro) {
 		List<Exemplar> exemplaresDisponiveis = new ArrayList<>();
-		for (Exemplar exemplar : getExemplaresByCodLivro(codigoLivro)) {
+		for (Exemplar exemplar : getLivroByCodigo(codigoLivro).getListaExemplares()) {
 			if (exemplar.getStatus().equals("Disponível")) {
 				exemplaresDisponiveis.add(exemplar);
 			}

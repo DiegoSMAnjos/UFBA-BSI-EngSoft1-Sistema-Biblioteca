@@ -13,6 +13,7 @@ public class Livro implements Subject {
 	private String autor;
 	private String edicao;
 	private String anoPublicacao;
+	private List<Exemplar> listaExemplares;
 	private List<Observer> observadores;
 	private int reservasSimultaneas = 0;
 
@@ -23,6 +24,7 @@ public class Livro implements Subject {
 		this.autor = autor;
 		this.edicao = edicao;
 		this.anoPublicacao = anopublicacao;
+		this.listaExemplares = new ArrayList<>();
 		this.observadores = new ArrayList<>();
 	}
 
@@ -48,6 +50,10 @@ public class Livro implements Subject {
 
 	public String getAnoPublicacao() {
 		return anoPublicacao;
+	}
+
+	public List<Exemplar> getListaExemplares() {
+		return listaExemplares;
 	}
 	
 	public List<Observer> getObservadores() {
@@ -81,6 +87,10 @@ public class Livro implements Subject {
 	public void setAnoPublicacao(String anoPublicacao) {
 		this.anoPublicacao = anoPublicacao;
 	}
+
+	public void setListaExemplares(List<Exemplar> listaExemplares) {
+		this.listaExemplares = listaExemplares;
+	}
 	
 	public void addReservasSimultaneas() {
 		this.reservasSimultaneas++;
@@ -113,6 +123,8 @@ public class Livro implements Subject {
         }
 		
 	}
+
+
 
 
 }
