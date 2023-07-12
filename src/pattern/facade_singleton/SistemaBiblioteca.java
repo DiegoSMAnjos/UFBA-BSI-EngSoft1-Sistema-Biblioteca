@@ -11,15 +11,7 @@ import model.entities.Livro;
 import model.entities.Usuario;
 import model.services.Emprestimo;
 import model.services.Reserva;
-import pattern.command.Command;
-import pattern.command.CommandAdicionarObservador;
-import pattern.command.CommandConsultarLivro;
-import pattern.command.CommandConsultarNotificacoes;
-import pattern.command.CommandConsultarUsuario;
-import pattern.command.CommandRealizarDevolucao;
-import pattern.command.CommandRealizarEmprestimo;
-import pattern.command.CommandRealizarReserva;
-import pattern.command.CommandSair;
+import pattern.command.*;
 import pattern.observer.Observer;
 
 public class SistemaBiblioteca {
@@ -180,9 +172,7 @@ public class SistemaBiblioteca {
 			}
 		}
 		Exemplar exemplar = getLivroByCodigo(codigoLivro).getListaExemplares().stream()
-                .filter(x -> x.getStatus().equals("Disponível"))
-                .findFirst()
-                .orElse(null);
+				.filter(x -> x.getStatus().equals("Disponível")).findFirst().orElse(null);
 		if (exemplar != null) {
 			usuario.getListaReservas().add(new Reserva(usuario, exemplar));
 			System.out.println("Reserva realizada!");
@@ -191,12 +181,11 @@ public class SistemaBiblioteca {
 			getLivroByCodigo(codigoLivro).addReservasSimultaneas();
 			getLivroByCodigo(codigoLivro).verificarReservasSimultaneas();
 			return;
-		}
-		else {
+		} else {
 			System.out.println("Não há exemplares disponíveis.");
 			System.out.println("Reserva não realizada.");
 		}
-		
+
 	}
 
 	public void commandSair() {
@@ -205,97 +194,48 @@ public class SistemaBiblioteca {
 	}
 
 	public Usuario getUsuarioByCodigo(String codigoUsuario) {
-		for (Usuario usuario : this.getListaUsuarios()) {
-			if (usuario.getCodigo().equals(codigoUsuario)) {
-				return usuario;
-			}
-		}
-		return null;
+		return getListaUsuarios().stream().filter(usuario -> usuario.getCodigo().equals(codigoUsuario)).findFirst()
+				.orElse(null);
 	}
 
 	public Livro getLivroByCodigo(String codigoLivro) {
-		for (Livro livro : getListaLivros())
-			if (livro.getCodigo().equals(codigoLivro)) {
-				return livro;
-			}
-		return null;
+		return getListaLivros().stream().filter(livro -> livro.getCodigo().equals(codigoLivro)).findFirst()
+				.orElse(null);
 	}
 
 	public List<Exemplar> getExemplaresByStatus(String codLivro, String status) {
-		List<Exemplar> listaExemplaresLivro = new ArrayList<>();
-		for (Exemplar exemplar : getLivroByCodigo(codLivro).getListaExemplares()) {
-			if (exemplar.getStatus().equals(status)) {
-				listaExemplaresLivro.add(exemplar);
-			}
-		}
-		return listaExemplaresLivro;
+		return getLivroByCodigo(codLivro).getListaExemplares().stream()
+				.filter(exemplar -> exemplar.getStatus().equals(status)).toList();
 	}
 
 	public List<Emprestimo> getEmprestimosAtuaisByUsuario(Usuario usuario) {
-		List<Emprestimo> emprestimosAtuais = new ArrayList<>();
-
-		for (Emprestimo emp : usuario.getListaEmprestimos()) {
-			if (emp.getIsAtivo() == true) {
-				emprestimosAtuais.add(emp);
-			}
-		}
-		return emprestimosAtuais;
+		return usuario.getListaEmprestimos().stream().filter(emp -> emp.getIsAtivo()).toList();
 	}
 
 	public List<Reserva> getReservasAtuaisByUsuario(Usuario usuario) {
-		List<Reserva> reservasAtuais = new ArrayList<>();
-		for (Reserva res : usuario.getListaReservas()) {
-			if (res.getIsAtiva() == true) {
-				reservasAtuais.add(res);
-			}
-		}
-		return reservasAtuais;
+		return usuario.getListaReservas().stream().filter(res -> res.getIsAtiva()).toList();
 	}
 
 	public List<Reserva> getReservasAtuaisByLivro(String codigoLivro) {
-		List<Reserva> reservasAtuais = new ArrayList<>();
-		for (Usuario usuario : getListaUsuarios()) {
-			for (Reserva res : usuario.getListaReservas()) {
-				if (res.getExemplar().getCodigoLivro().equals(codigoLivro) && res.getIsAtiva() == true) {
-					reservasAtuais.add(res);
-				}
-			}
-		}	
-		return reservasAtuais;
+		return getListaUsuarios().stream().flatMap(usuario -> usuario.getListaReservas().stream())
+				.filter(res -> res.getExemplar().getCodigoLivro().equals(codigoLivro) && res.getIsAtiva()).toList();
 	}
 
 	public Reserva getReservaAtivaByExemplar(String codigoExemplar) {
-		for (Usuario usuario : getListaUsuarios()) {
-			for (Reserva reserva : usuario.getListaReservas()) {
-				if (reserva.getIsAtiva() == true && reserva.getExemplar().getCodigo().equals(codigoExemplar)) {
-					return reserva;
-				}
-			}
-
-		}
-		return null;
+		return getListaUsuarios().stream().flatMap(usuario -> usuario.getListaReservas().stream())
+				.filter(reserva -> reserva.getIsAtiva() && reserva.getExemplar().getCodigo().equals(codigoExemplar))
+				.findFirst().orElse(null);
 	}
 
 	public Emprestimo getEmprestimoAtivoByExemplar(String codigoExemplar) {
-		for (Usuario usuario : getListaUsuarios()) {
-			for (Emprestimo emprestimo : usuario.getListaEmprestimos()) {
-				if (emprestimo.getIsAtivo() == true && emprestimo.getExemplar().getCodigo().equals(codigoExemplar)) {
-					return emprestimo;
-				}
-			}
-		}
-		return null;
+		return getListaUsuarios().stream().flatMap(usuario -> usuario.getListaEmprestimos().stream()).filter(
+				emprestimo -> emprestimo.getIsAtivo() && emprestimo.getExemplar().getCodigo().equals(codigoExemplar))
+				.findFirst().orElse(null);
 	}
 
 	public List<Exemplar> getExemplaresDisponiveis(String codigoLivro) {
-		List<Exemplar> exemplaresDisponiveis = new ArrayList<>();
-		for (Exemplar exemplar : getLivroByCodigo(codigoLivro).getListaExemplares()) {
-			if (exemplar.getStatus().equals("Disponível")) {
-				exemplaresDisponiveis.add(exemplar);
-			}
-		}
-		return exemplaresDisponiveis;
-
+		return getLivroByCodigo(codigoLivro).getListaExemplares().stream()
+				.filter(exemplar -> exemplar.getStatus().equals("Disponível")).toList();
 	}
 
 }
