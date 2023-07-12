@@ -7,6 +7,8 @@ public abstract class Usuario  {
 	protected String tipoUsuario;
 	protected String nome;
 	protected EmprestimoStrategy emprestimoStrategy;
+	protected int maxEmprestimosAbertos;
+	private int tempoEmprestimo;
 
 
 	public Usuario(String codigo, String tipoUsuario, String nome) {
@@ -31,6 +33,14 @@ public abstract class Usuario  {
 		return emprestimoStrategy;
 	}
 
+	public int getMaxEmprestimosAbertos() {
+		return maxEmprestimosAbertos;
+	}
+
+	public int getTempoEmprestimo() {
+		return tempoEmprestimo;
+	}
+
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
@@ -47,4 +57,12 @@ public abstract class Usuario  {
 		this.emprestimoStrategy = emprestimoStrategy;
 	}
 
+	public void setMaxEmprestimosAbertos(int maxEmprestimosAbertos) {
+		this.maxEmprestimosAbertos = maxEmprestimosAbertos;
+	}
+
+	public void setTempoEmprestimo(int tempoEmprestimo) {
+		this.tempoEmprestimo = tempoEmprestimo;
+	}
+	
 }

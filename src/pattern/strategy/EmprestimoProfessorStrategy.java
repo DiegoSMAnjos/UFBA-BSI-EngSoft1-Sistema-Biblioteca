@@ -10,7 +10,6 @@ import pattern.facade_singleton.SistemaBiblioteca;
 public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
 	@Override
 	public void realizarEmprestimo(String codUsuario, String codigoLivro) {
-		int tempoEmprestimo = 7;
 		SistemaBiblioteca bib = SistemaBiblioteca.getInstance();
 		Usuario usuario = bib.getUsuarioByCodigo(codUsuario);
 		
@@ -24,7 +23,7 @@ public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
 				reserva.getExemplar().setStatus("Emprestado");
 				reserva.setIsAtiva(false);
 				bib.getLivroByCodigo(codigoLivro).removeReservasSimultaneas();
-				bib.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(tempoEmprestimo)));
+				bib.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(usuario.getTempoEmprestimo())));
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
 				System.out.println("Livro: " + bib.getLivroByCodigo(codigoLivro).getTitulo());
@@ -33,7 +32,7 @@ public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
 		}
 		for (Exemplar exemplar : bib.getExemplaresByCodLivro(codigoLivro)) {
 			if (exemplar.getStatus().equals("Disponível")) {
-				bib.getListaEmprestimos().add(new Emprestimo(usuario, exemplar, LocalDate.now(), LocalDate.now().plusDays(tempoEmprestimo)));
+				bib.getListaEmprestimos().add(new Emprestimo(usuario, exemplar, LocalDate.now(), LocalDate.now().plusDays(usuario.getTempoEmprestimo())));
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
 				System.out.println("Livro: " + bib.getLivroByCodigo(codigoLivro).getTitulo());
@@ -45,7 +44,7 @@ public class EmprestimoProfessorStrategy implements EmprestimoStrategy {
 				reserva.getExemplar().setStatus("Emprestado");
 				reserva.setIsAtiva(false);
 				bib.getLivroByCodigo(codigoLivro).removeReservasSimultaneas();
-				bib.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(tempoEmprestimo)));
+				bib.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(usuario.getTempoEmprestimo())));
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
 				System.out.println("Livro: " + bib.getLivroByCodigo(codigoLivro).getTitulo());
