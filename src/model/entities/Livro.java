@@ -103,7 +103,7 @@ public class Livro implements Subject {
 	}
 	
     public void verificarReservasSimultaneas() {
-        if (reservasSimultaneas > 2) {
+        if (getReservasSimultaneas() > 2) {
         	notifyObserver();
         }
     }

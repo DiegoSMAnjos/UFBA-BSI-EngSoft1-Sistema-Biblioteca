@@ -152,6 +152,8 @@ public class SistemaBiblioteca {
 	}
 
 	public void commandRealizarEmprestimo(String codigoUsuario, String codigoLivro) {
+		// getUsuarioByID, getLivroById; 
+		
 		getUsuarioByCodigo(codigoUsuario).getEmprestimoStrategy().realizarEmprestimo(codigoUsuario, codigoLivro);
 	}
 

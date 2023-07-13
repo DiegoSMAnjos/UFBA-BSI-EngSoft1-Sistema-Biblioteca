@@ -50,7 +50,7 @@ public class EmprestimoAlunoGradStrategy implements EmprestimoStrategy{
 			if (reserva.getIsAtiva() == true && reserva.getExemplar().getCodigoLivro().equals(codigoLivro)) {
 				reserva.getExemplar().setStatus("Emprestado");
 				reserva.setIsAtiva(false);
-				bib.getLivroByCodigo(reserva.getExemplar().getCodigoLivro()).removeReservasSimultaneas();;
+				bib.getLivroByCodigo(reserva.getExemplar().getCodigoLivro()).removeReservasSimultaneas();
 				usuario.getListaEmprestimos().add(new Emprestimo(usuario, reserva.getExemplar(), LocalDate.now(), LocalDate.now().plusDays(getTempoEmprestimo())));
 				System.out.println("Empréstimo realizado com sucesso!");
 				System.out.println("Usuário: " + usuario.getNome());
